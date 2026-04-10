@@ -5,6 +5,7 @@ mod excel;
 mod utils;
 
 use gui::app::RPingApp;
+use eframe::Renderer;
 
 fn main() -> eframe::Result<()> {
     tracing_subscriber::fmt::init();
@@ -15,6 +16,7 @@ fn main() -> eframe::Result<()> {
             .with_min_inner_size([700.0, 400.0])
             .with_title("RPing - 多目标Ping工具 | Powered by byff")
             .with_drag_and_drop(true),
+        renderer: Renderer::Wgpu,
         ..Default::default()
     };
 

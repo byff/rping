@@ -198,14 +198,20 @@ impl PingTestApp {
 
         match ext.as_str() {
             "txt" | "csv" => {
-                if let Ok(content) = std::fs::read_to_string(&path) {
-                    // Auto-extract IPs from file content
-                    let cleaned = utils::extract_and_clean_ips(&content);
-                    self.address_input = if cleaned.is_empty() { content } else { cleaned };
-                    self.last_cleaned_input = self.address_input.clone();
-                    self.status_msg = format!("已导入: {}", path.display());
-                    if self.is_running {
-                        self.refresh_ping();
+                match std::fs::read_to_string(&path) {
+                    Ok(content) => {
+                        let cleaned = utils::extract_and_clean_ips(&content);
+                        self.address_input = if cleaned.is_empty() { content } else { cleaned };
+                        self.last_cleaned_input = self.address_input.clone();
+                        self.status_msg = format!("已导入: {}", path.display());
+                        if self.is_running {
+                            self.refresh_ping();
+                        }
+                    }
+                    Err(e) => {
+                        self.dialog_state.show_error("读取文件失败", &format!(
+                            "文件: {}\n\n错误: {}", path.display(), e
+                        ));
                     }
                 }
             }
@@ -232,12 +238,17 @@ impl PingTestApp {
                         }
                     }
                     Err(e) => {
-                        self.status_msg = format!("读取Excel失败: {}", e);
+                        self.dialog_state.show_error("读取Excel失败", &format!(
+                            "文件: {}\n\n错误: {}", path.display(), e
+                        ));
                     }
                 }
             }
             _ => {
-                self.status_msg = format!("不支持的文件格式: {}", ext);
+                self.dialog_state.show_error("不支持的文件格式", &format!(
+                    "文件: {}\n\n支持的格式: txt, csv, xlsx, xls\n请选择正确的文件格式。",
+                    path.display()
+                ));
             }
         }
     }
@@ -286,7 +297,9 @@ impl PingTestApp {
         if let Some(path) = dialog.save_file() {
             match excel::export_results(&path, &self.targets, &self.config.export) {
                 Ok(_) => self.status_msg = format!("已导出: {}", path.display()),
-                Err(e) => self.status_msg = format!("导出失败: {}", e),
+                Err(e) => self.dialog_state.show_error("导出失败", &format!(
+                    "文件: {}\n\n错误: {}", path.display(), e
+                )),
             }
         }
     }
@@ -320,7 +333,9 @@ impl PingTestApp {
                     &self.config.export,
                 ) {
                     Ok(_) => self.status_msg = format!("已插入结果: {}", path.display()),
-                    Err(e) => self.status_msg = format!("插入失败: {}", e),
+                    Err(e) => self.dialog_state.show_error("插入结果失败", &format!(
+                        "文件: {}\n\n错误: {}", path.display(), e
+                    )),
                 }
             }
         }
@@ -372,6 +387,7 @@ impl eframe::App for PingTestApp {
         dialogs::render_settings_dialog(ctx, &mut self.config, &mut self.dialog_state.show_settings);
         dialogs::render_ip_warning_dialog(ctx, &mut self.dialog_state);
         dialogs::render_excel_column_picker(ctx, &mut self.dialog_state);
+        dialogs::render_error_dialog(ctx, &mut self.dialog_state);
         dialogs::render_about_dialog(ctx, &mut self.dialog_state.show_about);
 
         // Top panel - toolbar

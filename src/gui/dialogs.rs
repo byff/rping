@@ -8,11 +8,22 @@ pub struct DialogState {
     pub show_ip_warning: bool,
     pub show_excel_column_picker: bool,
     pub show_about: bool,
+    pub show_error: bool,
+    pub error_title: String,
+    pub error_message: String,
     pub ip_count_warning: usize,
     pub ip_warning_confirmed: bool,
     pub excel_columns: Vec<(usize, String)>,
     pub selected_excel_column: Option<usize>,
     pub excel_column_confirmed: bool,
+}
+
+impl DialogState {
+    pub fn show_error(&mut self, title: &str, message: &str) {
+        self.error_title = title.to_string();
+        self.error_message = message.to_string();
+        self.show_error = true;
+    }
 }
 
 pub fn render_settings_dialog(ctx: &Context, config: &mut AppConfig, open: &mut bool) {
@@ -175,6 +186,27 @@ pub fn render_excel_column_picker(ctx: &Context, state: &mut DialogState) {
                     state.selected_excel_column = None;
                     state.excel_column_confirmed = false;
                     state.show_excel_column_picker = false;
+                }
+            });
+        });
+}
+
+pub fn render_error_dialog(ctx: &Context, state: &mut DialogState) {
+    if !state.show_error {
+        return;
+    }
+
+    Window::new(format!("❌ {}", state.error_title))
+        .collapsible(false)
+        .resizable(false)
+        .default_width(360.0)
+        .show(ctx, |ui| {
+            ui.add_space(4.0);
+            ui.label(RichText::new(&state.error_message).size(14.0));
+            ui.add_space(12.0);
+            ui.horizontal(|ui| {
+                if ui.button(RichText::new("确定").color(theme::ACCENT)).clicked() {
+                    state.show_error = false;
                 }
             });
         });

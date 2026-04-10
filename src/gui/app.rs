@@ -426,24 +426,27 @@ impl eframe::App for PingTestApp {
         });
 
         // Bottom panel - status bar
-        egui::TopBottomPanel::bottom("status").show(ctx, |ui| {
-            ui.horizontal(|ui| {
-                ui.label(RichText::new(&self.status_msg).color(theme::TEXT_DIM).size(11.0));
-                ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                    ui.label(RichText::new("© 2026 byff").color(theme::TEXT_DIM).size(10.0));
-                    if !self.targets.is_empty() {
-                        ui.separator();
-                        let total = self.targets.len();
-                        let alive = self.targets.iter()
-                            .filter(|t| t.stats.read().is_alive)
-                            .count();
-                        ui.label(RichText::new(format!(
-                            "在线: {}/{}", alive, total
-                        )).color(if alive == total { theme::SUCCESS_COLOR } else { theme::WARN_COLOR }).size(11.0));
-                    }
+        egui::TopBottomPanel::bottom("status")
+            .resizable(false)
+            .show(ctx, |ui| {
+                ui.set_min_height(32.0);
+                ui.horizontal(|ui| {
+                    ui.label(RichText::new(&self.status_msg).color(theme::TEXT_DIM).size(12.0));
+                    ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
+                        ui.label(RichText::new("© 2026 byff").color(theme::TEXT_DIM).size(10.0));
+                        if !self.targets.is_empty() {
+                            ui.separator();
+                            let total = self.targets.len();
+                            let alive = self.targets.iter()
+                                .filter(|t| t.stats.read().is_alive)
+                                .count();
+                            ui.label(RichText::new(format!(
+                                "在线: {}/{}", alive, total
+                            )).color(if alive == total { theme::SUCCESS_COLOR } else { theme::WARN_COLOR }).size(12.0));
+                        }
+                    });
                 });
             });
-        });
 
         // Left panel - address input
         egui::SidePanel::left("input_panel")
@@ -451,10 +454,11 @@ impl eframe::App for PingTestApp {
             .min_width(160.0)
             .resizable(true)
             .show(ctx, |ui| {
+                // Header row: centered with label + button
                 ui.horizontal(|ui| {
                     ui.label(RichText::new("目标地址").strong().color(theme::ACCENT));
                     ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                        if ui.small_button("🧹 整理").on_hover_text("自动提取并格式化IP地址").clicked() {
+                        if ui.add(egui::Button::new("🧹 整理IP").small().frame(true)).clicked() {
                             let cleaned = utils::extract_and_clean_ips(&self.address_input);
                             if !cleaned.is_empty() {
                                 self.address_input = cleaned.clone();
@@ -471,12 +475,11 @@ impl eframe::App for PingTestApp {
 
                 let available = ui.available_size();
                 egui::ScrollArea::vertical()
-                    .max_height(available.y - 8.0)
+                    .max_height((available.y - 12.0).max(20.0))
                     .show(ui, |ui| {
                         ui.add(
                             egui::TextEdit::multiline(&mut self.address_input)
                                 .desired_width(f32::INFINITY)
-                                .desired_rows(20)
                                 .font(egui::TextStyle::Monospace)
                                 .hint_text("192.168.1.1\n10.0.0.0/24\nexample.com\n或粘贴含IP的任意文本")
                         );

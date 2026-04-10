@@ -33,8 +33,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get version from tag
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Get version
+        run: |
+          # Tags: refs/tags/v1.2.3 → v1.2.3
+          # Branches: refs/heads/main → main (for dev builds)
+          REF="${GITHUB_REF#refs/tags/}"
+          REF="${REF#refs/heads/}"
+          echo "VERSION=${REF}" >> $GITHUB_ENV
+          echo "BUILD_NAME=pingTest-${REF}" >> $GITHUB_ENV
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable

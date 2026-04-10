@@ -473,10 +473,11 @@ impl eframe::App for PingTestApp {
                 ui.label(RichText::new("支持混合文本，自动提取IP").color(theme::TEXT_DIM).size(10.0));
                 ui.add_space(4.0);
 
-                let available = ui.available_size();
                 egui::ScrollArea::vertical()
-                    .max_height((available.y - 12.0).max(20.0))
+                    .id_salt("ip_input_scroll")
                     .show(ui, |ui| {
+                        let available = ui.available_size();
+                        ui.set_min_height(available.y.max(200.0));
                         ui.add(
                             egui::TextEdit::multiline(&mut self.address_input)
                                 .desired_width(f32::INFINITY)

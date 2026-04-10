@@ -7,6 +7,19 @@ authors = ["byff"]
 license = "MIT"
 repository = ""
 
+[lib]
+name = "rping_lib"
+
+[[bin]]
+name = "rping"
+path = "src/main.rs"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1"
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["winuser"] }
+
 [dependencies]
 # GUI
 eframe = { version = "0.29", default-features = false, features = ["default_fonts", "glow", "wgpu", "persistence"] }
@@ -37,9 +50,6 @@ dns-lookup = "2"
 # File dialog
 rfd = "0.15"
 
-# Drag and drop
-# (handled by eframe/egui natively)
-
 # Logging
 tracing = "0.1"
 tracing-subscriber = "0.3"
@@ -49,8 +59,8 @@ chrono = "0.4"
 parking_lot = "0.12"
 
 [profile.release]
-opt-level = "z"      # Optimize for size
-lto = true           # Link-time optimization
-codegen-units = 1    # Single codegen unit for better optimization
-panic = "abort"      # Smaller binary
-strip = true         # Strip symbols
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

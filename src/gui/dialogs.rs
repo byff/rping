@@ -71,6 +71,7 @@ pub fn render_settings_dialog(ctx: &Context, config: &mut AppConfig, open: &mut 
             ui.heading(RichText::new("其他").color(theme::ACCENT));
             ui.separator();
             ui.checkbox(&mut config.remember_addresses, "记忆地址列表");
+            ui.checkbox(&mut config.debug_mode, "调试模式（显示控制台窗口）");
 
             ui.add_space(8.0);
             if ui.button("保存配置").clicked() {

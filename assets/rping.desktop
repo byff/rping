@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=RPing
+Comment=高性能多目标Ping工具
+Exec=/usr/bin/rping
+Icon=/usr/share/icons/hicolor/256x256/apps/rping.png
+Terminal=false
+Type=Application
+Categories=Network;System;
+Keywords=ping;network;monitor;
+StartupWMClass=rping

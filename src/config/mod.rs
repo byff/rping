@@ -11,6 +11,7 @@ pub struct AppConfig {
     pub last_import_dir: Option<PathBuf>,
     pub window_width: f32,
     pub window_height: f32,
+    pub debug_mode: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -59,8 +60,9 @@ impl Default for AppConfig {
             remember_addresses: true,
             last_addresses: Vec::new(),
             last_import_dir: None,
-            window_width: 1000.0,
-            window_height: 600.0,
+            window_width: 1100.0,
+            window_height: 680.0,
+            debug_mode: false,
         }
     }
 }

@@ -33,6 +33,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get version from tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -47,7 +50,7 @@ jobs:
       - name: Install fpm (for .deb)
         if: matrix.format == 'deb'
         run: |
-          sudo gem install fpm --no-document || sudo apt-get install -y -qq ruby ruby-dev rubygems build-essential
+          sudo apt-get install -y -qq ruby ruby-dev rubygems build-essential
           sudo gem install fpm --no-document
 
       - name: Build
@@ -56,10 +59,20 @@ jobs:
       - name: Package .deb
         if: matrix.format == 'deb'
         run: |
-          PKG_NAME="rping_{{VERSION}}-${{ matrix.arch }}.deb"
+          PKG_NAME="rping_${VERSION}-${{ matrix.arch }}.deb"
+          mkdir -p dist
+          # Create icon directory
+          ICON_DIR="pkg/usr/share/icons/hicolor/256x256/apps"
+          mkdir -p "$ICON_DIR"
+          cp assets/rping.png "$ICON_DIR/rping.png"
+          # Create desktop file
+          DESKTOP_DIR="pkg/usr/share/applications"
+          mkdir -p "$DESKTOP_DIR"
+          cp assets/rping.desktop "$DESKTOP_DIR/rping.desktop"
+          # Package with fpm
           fpm -s dir -t deb \
             -n rping \
-            -v {{VERSION}} \
+            -v ${VERSION} \
             -a ${{ matrix.arch }} \
             -p dist/${PKG_NAME} \
             -d "libc6" \
@@ -67,7 +80,9 @@ jobs:
             --maintainer "byff" \
             --vendor "byff" \
             --license "MIT" \
-            target/${{ matrix.target }}/release/rping=/usr/bin/rping
+            target/${{ matrix.target }}/release/rping=/usr/bin/rping \
+            pkg/usr/share/icons=/usr/share/icons \
+            pkg/usr/share/applications=/usr/share/applications
 
       - name: Package .exe
         if: matrix.format == 'exe'

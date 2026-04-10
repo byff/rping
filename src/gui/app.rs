@@ -159,6 +159,10 @@ impl RPingApp {
                 if let Ok(content) = std::fs::read_to_string(&path) {
                     self.address_input = content;
                     self.status_msg = format!("已导入: {}", path.display());
+                    if self.is_running {
+                        self.stop_ping();
+                        self.start_ping();
+                    }
                 }
             }
             "xlsx" | "xls" => {
@@ -330,6 +334,10 @@ impl eframe::App for RPingApp {
                 if self.is_running {
                     if ui.button(RichText::new("⏹ 停止").color(theme::FAIL_COLOR)).clicked() {
                         self.stop_ping();
+                    }
+                    if ui.button(RichText::new("🔄 重启").color(theme::WARN_COLOR)).clicked() {
+                        self.stop_ping();
+                        self.start_ping();
                     }
                 } else {
                     if ui.button(RichText::new("▶ 开始").color(theme::SUCCESS_COLOR)).clicked() {

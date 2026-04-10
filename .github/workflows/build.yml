@@ -13,7 +13,7 @@ jobs:
           - target: x86_64-pc-windows-gnu
             os: ubuntu-latest
             name: rping-windows-x86_64.exe
-            packages: gcc-mingw-w64-x86-64
+            packages: gcc-mingw-w64-x86-64 mingw-w64-tools binutils-mingw-w64
             format: exe
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
@@ -61,15 +61,12 @@ jobs:
         run: |
           PKG_NAME="rping_${VERSION}-${{ matrix.arch }}.deb"
           mkdir -p dist
-          # Create icon directory
           ICON_DIR="pkg/usr/share/icons/hicolor/256x256/apps"
           mkdir -p "$ICON_DIR"
           cp assets/rping.png "$ICON_DIR/rping.png"
-          # Create desktop file
           DESKTOP_DIR="pkg/usr/share/applications"
           mkdir -p "$DESKTOP_DIR"
           cp assets/rping.desktop "$DESKTOP_DIR/rping.desktop"
-          # Package with fpm
           fpm -s dir -t deb \
             -n rping \
             -v ${VERSION} \

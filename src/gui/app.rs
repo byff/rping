@@ -10,7 +10,7 @@ use crate::gui::{table, dialogs, theme};
 use crate::utils;
 use crate::excel;
 
-pub struct RPingApp {
+pub struct PingTestApp {
     config: AppConfig,
     engine: Arc<RwLock<PingEngine>>,
     targets: Vec<PingTarget>,
@@ -30,14 +30,14 @@ pub struct RPingApp {
     // Status
     status_msg: String,
 
-    // Runtime
-    runtime: tokio::runtime::Runtime,
+    // Runtime - lazy init
+    runtime: Option<tokio::runtime::Runtime>,
 
     // Theme applied
     theme_applied: bool,
 }
 
-impl RPingApp {
+impl PingTestApp {
     pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         let config = AppConfig::load();
         let address_input = if config.remember_addresses {
@@ -53,12 +53,6 @@ impl RPingApp {
             config.ping.max_concurrent,
         );
 
-        let runtime = tokio::runtime::Builder::new_multi_thread()
-            .worker_threads(4)
-            .enable_all()
-            .build()
-            .expect("Failed to create tokio runtime");
-
         Self {
             config,
             engine: Arc::new(RwLock::new(engine)),
@@ -72,9 +66,22 @@ impl RPingApp {
             imported_excel_data: None,
             selected_ip_col: None,
             status_msg: "就绪".to_string(),
-            runtime,
+            runtime: None,
             theme_applied: false,
         }
+    }
+
+    fn ensure_runtime(&mut self) -> &tokio::runtime::Runtime {
+        if self.runtime.is_none() {
+            self.runtime = Some(
+                tokio::runtime::Builder::new_multi_thread()
+                    .worker_threads(2)
+                    .enable_all()
+                    .build()
+                    .expect("Failed to create tokio runtime"),
+            );
+        }
+        self.runtime.as_ref().unwrap()
     }
 
     fn start_ping(&mut self) {
@@ -83,7 +90,6 @@ impl RPingApp {
             return;
         }
 
-        // Check IP count
         let count = utils::count_cidr_ips(&self.address_input);
         if count > 1000 && !self.dialog_state.ip_warning_confirmed {
             self.dialog_state.ip_count_warning = count;
@@ -91,7 +97,7 @@ impl RPingApp {
             return;
         }
 
-        let parsed = utils::parse_targets(&self.address_input);
+        let parsed = utils::parse_targets(&self.address_input, self.config.cidr_strip_first_last);
         if parsed.is_empty() {
             self.status_msg = "未解析到有效IP地址".to_string();
             return;
@@ -111,7 +117,6 @@ impl RPingApp {
         self.sorted_indices = (0..self.targets.len()).collect();
         self.dialog_state.ip_warning_confirmed = false;
 
-        // Save addresses if remember is on
         if self.config.remember_addresses {
             self.config.last_addresses = self.address_input
                 .lines()
@@ -121,7 +126,6 @@ impl RPingApp {
             self.config.save();
         }
 
-        // Create and start engine
         let mut engine = PingEngine::new(
             self.config.ping.timeout_ms,
             self.config.ping.interval_ms,
@@ -129,7 +133,9 @@ impl RPingApp {
             self.config.ping.max_concurrent,
         );
         engine.set_targets(self.targets.clone());
-        engine.start(&self.runtime.handle());
+
+        self.ensure_runtime();
+        engine.start(self.runtime.as_ref().unwrap().handle());
         *self.engine.write() = engine;
 
         self.is_running = true;
@@ -148,7 +154,6 @@ impl RPingApp {
             .unwrap_or("")
             .to_lowercase();
 
-        // Remember directory
         if let Some(dir) = path.parent() {
             self.config.last_import_dir = Some(dir.to_path_buf());
             self.config.save();
@@ -172,14 +177,16 @@ impl RPingApp {
                         if ip_cols.is_empty() {
                             self.status_msg = "未在Excel中找到IP列".to_string();
                         } else if ip_cols.len() == 1 {
-                            // Auto-select single IP column
                             let col_idx = ip_cols[0].0;
                             self.extract_ips_from_excel(&rows, col_idx);
                             self.imported_file_path = Some(path);
                             self.imported_excel_data = Some((headers, rows));
                             self.selected_ip_col = Some(col_idx);
+                            if self.is_running {
+                                self.stop_ping();
+                                self.start_ping();
+                            }
                         } else {
-                            // Multiple columns, let user pick
                             self.dialog_state.excel_columns = ip_cols;
                             self.dialog_state.show_excel_column_picker = true;
                             self.imported_file_path = Some(path);
@@ -239,14 +246,14 @@ impl RPingApp {
 
         if let Some(path) = dialog.save_file() {
             match excel::export_results(&path, &self.targets, &self.config.export) {
-                Ok(_) => tracing::info!("导出成功: {}", path.display()),
+                Ok(_) => {}
                 Err(e) => tracing::error!("导出失败: {}", e),
             }
         }
     }
 
     fn export_to_source_excel(&self) {
-        if let (Some(source_path), Some((_, _)), Some(ip_col)) = (
+        if let (Some(source_path), Some(_), Some(ip_col)) = (
             &self.imported_file_path,
             &self.imported_excel_data,
             self.selected_ip_col,
@@ -273,7 +280,7 @@ impl RPingApp {
                     ip_col,
                     &self.config.export,
                 ) {
-                    Ok(_) => tracing::info!("插入结果成功: {}", path.display()),
+                    Ok(_) => {}
                     Err(e) => tracing::error!("插入结果失败: {}", e),
                 }
             }
@@ -281,7 +288,7 @@ impl RPingApp {
     }
 }
 
-impl eframe::App for RPingApp {
+impl eframe::App for PingTestApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if !self.theme_applied {
             theme::apply_theme(ctx);
@@ -307,6 +314,10 @@ impl eframe::App for RPingApp {
                 }
             }
             self.dialog_state.excel_column_confirmed = false;
+            if self.is_running {
+                self.stop_ping();
+                self.start_ping();
+            }
         }
 
         // Handle IP warning confirmation
@@ -328,7 +339,7 @@ impl eframe::App for RPingApp {
         // Top panel - toolbar
         egui::TopBottomPanel::top("toolbar").show(ctx, |ui| {
             ui.horizontal(|ui| {
-                ui.label(RichText::new("RPing").strong().color(theme::ACCENT).size(16.0));
+                ui.label(RichText::new("PingTest").strong().color(theme::ACCENT).size(16.0));
                 ui.separator();
 
                 if self.is_running {
@@ -339,10 +350,8 @@ impl eframe::App for RPingApp {
                         self.stop_ping();
                         self.start_ping();
                     }
-                } else {
-                    if ui.button(RichText::new("▶ 开始").color(theme::SUCCESS_COLOR)).clicked() {
-                        self.start_ping();
-                    }
+                } else if ui.button(RichText::new("▶ 开始").color(theme::SUCCESS_COLOR)).clicked() {
+                    self.start_ping();
                 }
 
                 ui.separator();
@@ -356,10 +365,8 @@ impl eframe::App for RPingApp {
                         self.export_results();
                     }
 
-                    if self.imported_file_path.is_some() {
-                        if ui.button("📎 插入到源表").clicked() {
-                            self.export_to_source_excel();
-                        }
+                    if self.imported_file_path.is_some() && ui.button("📎 插入到源表").clicked() {
+                        self.export_to_source_excel();
                     }
                 }
 
@@ -389,6 +396,7 @@ impl eframe::App for RPingApp {
                             "在线: {}/{}", alive, total
                         )).color(if alive == total { theme::SUCCESS_COLOR } else { theme::WARN_COLOR }).size(11.0));
                     }
+                    ui.label(RichText::new("© 2026 byff").color(theme::TEXT_DIM).size(10.0));
                 });
             });
         });
@@ -426,7 +434,6 @@ impl eframe::App for RPingApp {
                         .size(16.0));
                 });
             } else {
-                // Re-sort
                 table::sort_targets(&mut self.sorted_indices, &self.targets, &self.table_state);
                 table::render_table(ui, &self.targets, &self.sorted_indices, &mut self.table_state);
             }

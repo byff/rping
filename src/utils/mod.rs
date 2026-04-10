@@ -15,8 +15,8 @@ fn network_ip_count(network: &IpNetwork) -> u128 {
 }
 
 /// Parse input text into a list of IP addresses.
-/// Supports: single IP, CIDR notation, hostname, one per line or comma-separated.
-pub fn parse_targets(input: &str) -> Vec<(String, IpAddr)> {
+/// If strip_first_last is true, CIDR ranges will exclude network and broadcast addresses.
+pub fn parse_targets(input: &str, strip_first_last: bool) -> Vec<(String, IpAddr)> {
     let mut results = Vec::new();
     let lines: Vec<&str> = input
         .lines()
@@ -28,18 +28,24 @@ pub fn parse_targets(input: &str) -> Vec<(String, IpAddr)> {
 
     for entry in lines {
         if let Ok(network) = entry.parse::<IpNetwork>() {
-            // CIDR notation
             if network_ip_count(&network) > 65534 {
-                // Too large, skip (caller should warn)
                 continue;
             }
-            for ip in network.iter() {
-                results.push((ip.to_string(), ip));
+            let ips: Vec<IpAddr> = network.iter().collect();
+            let len = ips.len();
+            if strip_first_last && len > 2 {
+                // Skip network address (first) and broadcast address (last)
+                for ip in &ips[1..len-1] {
+                    results.push((ip.to_string(), *ip));
+                }
+            } else {
+                for ip in ips {
+                    results.push((ip.to_string(), ip));
+                }
             }
         } else if let Ok(ip) = entry.parse::<IpAddr>() {
             results.push((ip.to_string(), ip));
         } else {
-            // Try DNS resolve
             if let Ok(addrs) = dns_lookup::lookup_host(entry) {
                 if let Some(ip) = addrs.into_iter().next() {
                     results.push((entry.to_string(), ip));
@@ -51,7 +57,7 @@ pub fn parse_targets(input: &str) -> Vec<(String, IpAddr)> {
     results
 }
 
-/// Count how many IPs a CIDR would expand to (for warning dialog)
+/// Count how many IPs a CIDR would expand to
 pub fn count_cidr_ips(input: &str) -> usize {
     let mut count = 0usize;
     let lines: Vec<&str> = input
@@ -89,7 +95,6 @@ pub fn find_ip_columns(headers: &[String], rows: &[Vec<String>]) -> Vec<(usize, 
                 }
             }
         }
-        // If more than 50% of sampled rows have IPs, consider it an IP column
         if ip_count > 0 && ip_count * 2 >= sample_size {
             ip_cols.push((col_idx, header.clone()));
         }

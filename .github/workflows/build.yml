@@ -1,4 +1,4 @@
-name: Build RPing
+name: Build PingTest
 
 on:
   push:
@@ -12,18 +12,18 @@ jobs:
         include:
           - target: x86_64-pc-windows-gnu
             os: ubuntu-latest
-            name: rping-windows-x86_64.exe
+            name: pingTest-windows-x86_64.exe
             packages: gcc-mingw-w64-x86-64 mingw-w64-tools binutils-mingw-w64
             format: exe
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-            name: rping-linux-x86_64
+            name: pingTest-linux-x86_64
             packages: ""
             format: deb
             arch: amd64
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-latest
-            name: rping-linux-aarch64
+            name: pingTest-linux-aarch64
             packages: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
             format: deb
             arch: arm64
@@ -59,7 +59,7 @@ jobs:
       - name: Package .deb
         if: matrix.format == 'deb'
         run: |
-          PKG_NAME="rping_${VERSION}-${{ matrix.arch }}.deb"
+          PKG_NAME="pingTest_${VERSION}_${{ matrix.arch }}.deb"
           mkdir -p dist
           ICON_DIR="pkg/usr/share/icons/hicolor/256x256/apps"
           mkdir -p "$ICON_DIR"
@@ -68,7 +68,7 @@ jobs:
           mkdir -p "$DESKTOP_DIR"
           cp assets/rping.desktop "$DESKTOP_DIR/rping.desktop"
           fpm -s dir -t deb \
-            -n rping \
+            -n pingtest \
             -v ${VERSION} \
             -a ${{ matrix.arch }} \
             -p dist/${PKG_NAME} \
@@ -77,15 +77,17 @@ jobs:
             --maintainer "byff" \
             --vendor "byff" \
             --license "MIT" \
-            target/${{ matrix.target }}/release/rping=/usr/bin/rping \
+            target/${{ matrix.target }}/release/pingTest=/usr/bin/pingTest \
             pkg/usr/share/icons=/usr/share/icons \
             pkg/usr/share/applications=/usr/share/applications
+          # Also copy raw binary
+          cp target/${{ matrix.target }}/release/pingTest dist/${{ matrix.name }}
 
       - name: Package .exe
         if: matrix.format == 'exe'
         run: |
           mkdir -p dist
-          cp target/${{ matrix.target }}/release/rping.exe dist/${{ matrix.name }}
+          cp target/${{ matrix.target }}/release/pingTest.exe dist/${{ matrix.name }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

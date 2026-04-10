@@ -1,10 +1,10 @@
 [Desktop Entry]
-Name=RPing
+Name=PingTest
 Comment=高性能多目标Ping工具
-Exec=/usr/bin/rping
+Exec=/usr/bin/pingTest
 Icon=/usr/share/icons/hicolor/256x256/apps/rping.png
 Terminal=false
 Type=Application
 Categories=Network;System;
 Keywords=ping;network;monitor;
-StartupWMClass=rping
+StartupWMClass=pingTest

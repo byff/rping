@@ -12,6 +12,7 @@ pub struct AppConfig {
     pub window_width: f32,
     pub window_height: f32,
     pub debug_mode: bool,
+    pub cidr_strip_first_last: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -63,6 +64,7 @@ impl Default for AppConfig {
             window_width: 1100.0,
             window_height: 680.0,
             debug_mode: false,
+            cidr_strip_first_last: true,
         }
     }
 }
@@ -119,7 +121,7 @@ impl AppConfig {
             .ok()
             .and_then(|p| p.parent().map(|p| p.to_path_buf()))
             .unwrap_or_else(|| PathBuf::from("."));
-        exe_dir.join("rping_config.json")
+        exe_dir.join("pingtest_config.json")
     }
 
     pub fn load() -> Self {

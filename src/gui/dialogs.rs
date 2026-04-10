@@ -18,65 +18,80 @@ pub struct DialogState {
 pub fn render_settings_dialog(ctx: &Context, config: &mut AppConfig, open: &mut bool) {
     Window::new("⚙ 设置")
         .open(open)
-        .resizable(false)
-        .default_width(380.0)
+        .resizable(true)
+        .default_width(520.0)
         .show(ctx, |ui| {
+            // === Ping 参数 ===
             ui.heading(RichText::new("Ping 参数").color(theme::ACCENT));
             ui.separator();
-
-            ui.horizontal(|ui| {
-                ui.label("超时时间(ms):");
-                let mut timeout = config.ping.timeout_ms as i64;
-                ui.add(egui::DragValue::new(&mut timeout).range(100..=30000).speed(100));
-                config.ping.timeout_ms = timeout.max(100) as u64;
+            ui.columns(2, |cols| {
+                cols[0].horizontal(|ui| {
+                    ui.label("超时(ms):");
+                    let mut v = config.ping.timeout_ms as i64;
+                    ui.add(egui::DragValue::new(&mut v).range(100..=30000).speed(100));
+                    config.ping.timeout_ms = v.max(100) as u64;
+                });
+                cols[0].horizontal(|ui| {
+                    ui.label("包大小(B):");
+                    let mut v = config.ping.packet_size as i64;
+                    ui.add(egui::DragValue::new(&mut v).range(1..=65500).speed(1));
+                    config.ping.packet_size = v.max(1) as usize;
+                });
+                cols[1].horizontal(|ui| {
+                    ui.label("间隔(ms):");
+                    let mut v = config.ping.interval_ms as i64;
+                    ui.add(egui::DragValue::new(&mut v).range(100..=60000).speed(100));
+                    config.ping.interval_ms = v.max(100) as u64;
+                });
+                cols[1].horizontal(|ui| {
+                    ui.label("并发数:");
+                    let mut v = config.ping.max_concurrent as i64;
+                    ui.add(egui::DragValue::new(&mut v).range(1..=2000).speed(10));
+                    config.ping.max_concurrent = v.max(1) as usize;
+                });
             });
 
-            ui.horizontal(|ui| {
-                ui.label("数据包大小(bytes):");
-                let mut size = config.ping.packet_size as i64;
-                ui.add(egui::DragValue::new(&mut size).range(1..=65500).speed(1));
-                config.ping.packet_size = size.max(1) as usize;
-            });
+            ui.add_space(10.0);
 
-            ui.horizontal(|ui| {
-                ui.label("Ping间隔(ms):");
-                let mut interval = config.ping.interval_ms as i64;
-                ui.add(egui::DragValue::new(&mut interval).range(100..=60000).speed(100));
-                config.ping.interval_ms = interval.max(100) as u64;
-            });
-
-            ui.horizontal(|ui| {
-                ui.label("最大并发数:");
-                let mut max = config.ping.max_concurrent as i64;
-                ui.add(egui::DragValue::new(&mut max).range(1..=2000).speed(10));
-                config.ping.max_concurrent = max.max(1) as usize;
-            });
-
-            ui.add_space(12.0);
-            ui.heading(RichText::new("导出选项").color(theme::ACCENT));
+            // === 网络选项 ===
+            ui.heading(RichText::new("网络选项").color(theme::ACCENT));
             ui.separator();
+            ui.checkbox(&mut config.cidr_strip_first_last, "CIDR 去掉首尾IP（网络地址和广播地址）");
 
-            ui.checkbox(&mut config.export.export_hostname, "主机名");
-            ui.checkbox(&mut config.export.export_ip, "IP地址");
-            ui.checkbox(&mut config.export.export_success_count, "成功次数");
-            ui.checkbox(&mut config.export.export_fail_count, "失败次数");
-            ui.checkbox(&mut config.export.export_fail_rate, "失败率");
-            ui.checkbox(&mut config.export.export_total_sent, "总发送数");
-            ui.checkbox(&mut config.export.export_last_rtt, "当前延迟");
-            ui.checkbox(&mut config.export.export_max_rtt, "最大延迟");
-            ui.checkbox(&mut config.export.export_min_rtt, "最小延迟");
-            ui.checkbox(&mut config.export.export_avg_rtt, "平均延迟");
+            ui.add_space(10.0);
 
-            ui.add_space(12.0);
+            // === 导出选项 ===
+            ui.heading(RichText::new("导出字段").color(theme::ACCENT));
+            ui.separator();
+            ui.columns(2, |cols| {
+                cols[0].checkbox(&mut config.export.export_ip, "IP地址");
+                cols[0].checkbox(&mut config.export.export_hostname, "主机名");
+                cols[0].checkbox(&mut config.export.export_success_count, "成功次数");
+                cols[0].checkbox(&mut config.export.export_fail_count, "失败次数");
+                cols[0].checkbox(&mut config.export.export_fail_rate, "失败率");
+                cols[1].checkbox(&mut config.export.export_total_sent, "总发送数");
+                cols[1].checkbox(&mut config.export.export_last_rtt, "当前延迟");
+                cols[1].checkbox(&mut config.export.export_max_rtt, "最大延迟");
+                cols[1].checkbox(&mut config.export.export_min_rtt, "最小延迟");
+                cols[1].checkbox(&mut config.export.export_avg_rtt, "平均延迟");
+            });
+
+            ui.add_space(10.0);
+
+            // === 其他 ===
             ui.heading(RichText::new("其他").color(theme::ACCENT));
             ui.separator();
-            ui.checkbox(&mut config.remember_addresses, "记忆地址列表");
-            ui.checkbox(&mut config.debug_mode, "调试模式（显示控制台窗口）");
+            ui.columns(2, |cols| {
+                cols[0].checkbox(&mut config.remember_addresses, "记忆地址列表");
+                cols[1].checkbox(&mut config.debug_mode, "调试模式（需重启）");
+            });
 
             ui.add_space(8.0);
-            if ui.button("保存配置").clicked() {
-                config.save();
-            }
+            ui.horizontal(|ui| {
+                if ui.button(RichText::new("💾 保存").color(theme::ACCENT)).clicked() {
+                    config.save();
+                }
+            });
         });
 }
 
@@ -145,14 +160,14 @@ pub fn render_excel_column_picker(ctx: &Context, state: &mut DialogState) {
 }
 
 pub fn render_about_dialog(ctx: &Context, open: &mut bool) {
-    Window::new("关于 RPing")
+    Window::new("关于 PingTest")
         .open(open)
         .resizable(false)
         .default_width(300.0)
         .show(ctx, |ui| {
             ui.vertical_centered(|ui| {
-                ui.label(RichText::new("RPing").size(24.0).color(theme::ACCENT).strong());
-                ui.label(RichText::new("v0.1.0").color(theme::TEXT_DIM));
+                ui.label(RichText::new("PingTest").size(24.0).color(theme::ACCENT).strong());
+                ui.label(RichText::new("v0.2.0").color(theme::TEXT_DIM));
                 ui.add_space(8.0);
                 ui.label("高性能多目标 Ping 工具");
                 ui.add_space(4.0);

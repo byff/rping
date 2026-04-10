@@ -1,22 +1,18 @@
 [package]
-name = "rping"
-version = "0.1.0"
+name = "pingtest"
+version = "0.2.0"
 edition = "2021"
-description = "A high-performance multi-target ping tool with modern GUI"
+description = "High-performance multi-target ping tool | Powered by byff"
 authors = ["byff"]
 license = "MIT"
-repository = ""
-
-[lib]
-name = "rping_lib"
 
 [[bin]]
-name = "rping"
+name = "pingTest"
 path = "src/main.rs"
 
 [dependencies]
-# GUI
-eframe = { version = "0.29", default-features = false, features = ["default_fonts", "glow", "wgpu", "persistence"] }
+# GUI - glow only (faster startup than wgpu)
+eframe = { version = "0.29", default-features = false, features = ["default_fonts", "glow", "persistence"] }
 egui = "0.29"
 egui_extras = { version = "0.29", features = ["syntect"] }
 
@@ -46,11 +42,13 @@ rfd = "0.15"
 
 # Logging
 tracing = "0.1"
-tracing-subscriber = "0.3"
 
 # Misc
 chrono = "0.4"
 parking_lot = "0.12"
+
+[build-dependencies]
+winres = "0.1"
 
 [profile.release]
 opt-level = "z"

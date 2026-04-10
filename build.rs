@@ -1,4 +1,10 @@
 fn main() {
-    // Platform-specific build scripts can be added here
-    // Currently no special build steps needed
+    #[cfg(windows)]
+    {
+        let mut res = winres::WindowsResource::new();
+        res.set_icon("assets/icon.ico");
+        if let Err(e) = res.compile() {
+            eprintln!("winres: {}", e);
+        }
+    }
 }

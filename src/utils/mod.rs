@@ -57,9 +57,11 @@ pub fn extract_and_clean_ips(input: &str) -> String {
 }
 
 /// Parse input text into a list of IP addresses.
+/// Returns (targets, skipped_count).
 /// If strip_first_last is true, CIDR ranges will exclude network and broadcast addresses.
-pub fn parse_targets(input: &str, strip_first_last: bool) -> Vec<(String, IpAddr)> {
+pub fn parse_targets(input: &str, strip_first_last: bool) -> (Vec<(String, IpAddr)>, usize) {
     let mut results = Vec::new();
+    let mut skipped = 0usize;
     let lines: Vec<&str> = input
         .lines()
         .flat_map(|l| l.split(','))
@@ -71,6 +73,7 @@ pub fn parse_targets(input: &str, strip_first_last: bool) -> Vec<(String, IpAddr
     for entry in lines {
         if let Ok(network) = entry.parse::<IpNetwork>() {
             if network_ip_count(&network) > 65534 {
+                skipped += 1;
                 continue;
             }
             let ips: Vec<IpAddr> = network.iter().collect();
@@ -90,12 +93,16 @@ pub fn parse_targets(input: &str, strip_first_last: bool) -> Vec<(String, IpAddr
             if let Ok(addrs) = dns_lookup::lookup_host(entry) {
                 if let Some(ip) = addrs.into_iter().next() {
                     results.push((entry.to_string(), ip));
+                } else {
+                    skipped += 1;
                 }
+            } else {
+                skipped += 1;
             }
         }
     }
 
-    results
+    (results, skipped)
 }
 
 /// Count how many IPs a CIDR would expand to

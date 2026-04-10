@@ -88,31 +88,10 @@ impl PingTestApp {
         self.runtime.as_ref().unwrap()
     }
 
-    /// Auto-clean input: extract IPs from messy text
-    fn clean_input_if_needed(&mut self) {
-        if self.address_input == self.last_cleaned_input {
-            return;
-        }
-        // Check if input contains non-IP characters (Chinese, random text, etc.)
-        let has_noise = self.address_input.chars().any(|c| {
-            !c.is_ascii_alphanumeric() && !matches!(c, '.' | '/' | ':' | '-' | '_' | '\n' | '\r' | ' ' | '\t' | ',' | ';')
-        });
-        if has_noise {
-            let cleaned = utils::extract_and_clean_ips(&self.address_input);
-            if !cleaned.is_empty() {
-                self.address_input = cleaned.clone();
-                self.last_cleaned_input = cleaned;
-                self.status_msg = "已自动提取IP地址".to_string();
-                return;
-            }
-        }
-        self.last_cleaned_input = self.address_input.clone();
-    }
+    /// Auto-clean is removed — parse_targets naturally skips invalid lines.
+    /// Manual cleanup via 🧹 button or file import only.
 
     fn start_ping(&mut self) {
-        // Auto-clean before parsing
-        self.clean_input_if_needed();
-
         if self.address_input.trim().is_empty() {
             self.status_msg = "请输入IP地址".to_string();
             return;
@@ -125,9 +104,16 @@ impl PingTestApp {
             return;
         }
 
-        let parsed = utils::parse_targets(&self.address_input, self.config.cidr_strip_first_last);
+        let (parsed, skipped) = utils::parse_targets(&self.address_input, self.config.cidr_strip_first_last);
         if parsed.is_empty() {
-            self.status_msg = "未解析到有效IP地址".to_string();
+            if skipped > 0 {
+                self.dialog_state.show_error("解析失败", &format!(
+                    "未解析到有效IP地址，跳过了 {} 行无效内容。\n\n请检查输入格式，每行一个IP/域名/CIDR。",
+                    skipped
+                ));
+            } else {
+                self.status_msg = "未解析到有效IP地址".to_string();
+            }
             return;
         }
 
@@ -167,7 +153,11 @@ impl PingTestApp {
         *self.engine.write() = engine;
 
         self.is_running = true;
-        self.status_msg = format!("正在 Ping {} 个目标...", self.targets.len());
+        if skipped > 0 {
+            self.status_msg = format!("正在 Ping {} 个目标（跳过 {} 行无效内容）", self.targets.len(), skipped);
+        } else {
+            self.status_msg = format!("正在 Ping {} 个目标...", self.targets.len());
+        }
     }
 
     fn stop_ping(&mut self) {

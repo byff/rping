@@ -54,7 +54,12 @@ jobs:
           sudo gem install fpm --no-document
 
       - name: Build
-        run: cargo build --release --target ${{ matrix.target }}
+        run: |
+          # For Windows cross-compile: tell winres where windres is
+          if [ "${{ matrix.target }}" = "x86_64-pc-windows-gnu" ]; then
+            export WINDRES=x86_64-w64-mingw32-windres
+          fi
+          cargo build --release --target ${{ matrix.target }}
 
       - name: Package .deb
         if: matrix.format == 'deb'

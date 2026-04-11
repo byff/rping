@@ -3,8 +3,6 @@ use std::sync::Arc;
 use parking_lot::RwLock;
 use eframe::egui;
 use egui::{RichText, Layout, Align};
-use egui::text_selection::CursorRange;
-use egui::epaint::text::cursor::Cursor;
 
 use crate::config::AppConfig;
 use crate::ping::{PingEngine, PingTarget, PingStats};
@@ -374,8 +372,10 @@ impl eframe::App for PingTestApp {
             let n = self.address_input.len();
             if n > 0 {
                 if let Some(mut state) = egui::widgets::text_edit::TextEditState::load(ctx, id) {
-                    let end = Cursor { ccursor: egui::text::CCursor::new(n), ..Default::default() };
-                    state.cursor.set_range(Some(CursorRange::two(Cursor::default(), end)));
+                    use egui::text::CCursorRange;
+                    let start = egui::text::CCursor::new(0);
+                    let end = egui::text::CCursor::new(n);
+                    state.cursor.set_char_range(Some(CCursorRange::two(start, end)));
                     state.store(ctx, id);
                 }
             }

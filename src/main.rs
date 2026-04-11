@@ -14,7 +14,7 @@ fn main() -> eframe::Result<()> {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([1100.0, 680.0])
             .with_min_inner_size([900.0, 500.0])
-            .with_title("PingTest | 批量Ping工具     ----power by byff")
+            .with_title("PingTest | 批量Ping测试工具")
             .with_drag_and_drop(true)
             .with_icon(load_icon()),
         ..Default::default()

@@ -358,36 +358,6 @@ impl eframe::App for PingTestApp {
             });
         }
 
-        // Intercept Ctrl+V on the input TextEdit: replace entire text with clipboard content
-        // Must happen before TextEdit renders so it doesn't also insert at cursor
-        {
-            let id = egui::Id::new("ip_input_textedit");
-            if ctx.memory(|m| m.has_focus(id)) {
-                ctx.input_mut(|i| {
-                    let ctrl_v = i.events.iter().position(|e| {
-                        matches!(e, egui::Event::Key {
-                            key: egui::Key::V,
-                            pressed: true,
-                            modifiers: m,
-                            ..
-                        } if m.command || m.ctrl)
-                    });
-                    if let Some(idx) = ctrl_v {
-                        // Remove the Ctrl+V key event
-                        i.events.remove(idx);
-                        // Read clipboard and replace text
-                        if let Ok(mut cb) = arboard::Clipboard::new() {
-                            if let Ok(text) = cb.get_text() {
-                                if !text.is_empty() {
-                                    self.address_input = text;
-                                    self.select_all_countdown = 2;
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }
         if self.select_all_countdown > 0 {
             let n = self.address_input.len();
             if n > 0 {

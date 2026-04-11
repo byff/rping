@@ -209,7 +209,7 @@ impl PingTestApp {
                     }
                 }
             }
-            "xlsx" | "xls" => {
+            "xlsx" => {
                 match excel::read_excel(&path) {
                     Ok((headers, rows)) => {
                         let ip_cols = utils::find_ip_columns(&headers, &rows);
@@ -238,9 +238,15 @@ impl PingTestApp {
                     }
                 }
             }
+            "xls" => {
+                self.dialog_state.show_error("Excel 格式不支持", &format!(
+                    "文件: {}\n\n.xls 格式暂不支持，请将文件另存为 .xlsx 后重试。",
+                    path.display()
+                ));
+            }
             _ => {
                 self.dialog_state.show_error("不支持的文件格式", &format!(
-                    "文件: {}\n\n支持的格式: txt, csv, xlsx, xls\n请选择正确的文件格式。",
+                    "文件: {}\n\n支持的格式: txt, csv, xlsx\n请选择正确的文件格式。",
                     path.display()
                 ));
             }
@@ -265,9 +271,9 @@ impl PingTestApp {
     fn import_file(&mut self) {
         let initial_dir = self.config.last_import_dir.clone();
         let mut dialog = rfd::FileDialog::new()
-            .add_filter("所有支持格式", &["txt", "csv", "xlsx", "xls"])
+            .add_filter("所有支持格式", &["txt", "csv", "xlsx"])
             .add_filter("文本文件", &["txt", "csv"])
-            .add_filter("Excel文件", &["xlsx", "xls"]);
+            .add_filter("Excel文件", &["xlsx"]);
 
         if let Some(dir) = initial_dir {
             dialog = dialog.set_directory(dir);
@@ -470,7 +476,7 @@ impl eframe::App for PingTestApp {
                 ui.horizontal(|ui| {
                     ui.label(RichText::new("目标地址").strong().color(theme::ACCENT));
                     ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                        if ui.add(egui::Button::new("🧹 整理IP").small().frame(true)).clicked() {
+                        if ui.add(egui::Button::new("整理IP").small().frame(true)).clicked() {
                             let cleaned = utils::extract_and_clean_ips(&self.address_input);
                             if !cleaned.is_empty() {
                                 self.address_input = cleaned.clone();

@@ -2,7 +2,7 @@
 
 高性能多目标 Ping 工具，支持同时 Ping 1000+ 个 IP。
 
-**Powered by byff** | © 2026 byff
+
 
 ## 功能
 

@@ -46,6 +46,9 @@ pub struct PingTestApp {
 
     // Countdown to apply select-all after focus is granted
     select_all_countdown: u8,
+
+    // Timestamp (secs) of last click on input TextEdit, for double-click detection
+    last_input_click_secs: Option<f64>,
 }
 
 impl PingTestApp {
@@ -82,6 +85,7 @@ impl PingTestApp {
             last_cleaned_input: address_input,
             input_focus_requested: false,
             select_all_countdown: 2,
+            last_input_click_secs: None,
         }
     }
 
@@ -524,9 +528,15 @@ impl eframe::App for PingTestApp {
                             .id(egui::Id::new("ip_input_textedit"))
                             .frame(true)
                     );
-                    // Clicking the text edit: select all if there's content
-                    if response.has_focus() && !self.address_input.is_empty() {
-                        self.select_all_countdown = 2;
+                    // Double-click TextEdit → select all (regardless of cursor position)
+                    if response.clicked() {
+                        let now = ctx.input(|i| i.time);
+                        let is_double = self.last_input_click_secs
+                            .map_or(false, |t| now - t < 0.3);
+                        self.last_input_click_secs = Some(now);
+                        if is_double && !self.address_input.is_empty() {
+                            self.select_all_countdown = 2;
+                        }
                     }
                 });
             });

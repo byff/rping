@@ -42,7 +42,7 @@ dns-lookup = "2"
 rfd = "0.15"
 
 # Logging
-tracing = "0.1"
+arboard = "3.6"
 
 # Misc
 chrono = "0.4"

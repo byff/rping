@@ -358,7 +358,36 @@ impl eframe::App for PingTestApp {
             });
         }
 
-        // Inject Ctrl+A for a few frames so TextEdit processes select-all
+        // Intercept Ctrl+V on the input TextEdit: replace entire text with clipboard content
+        // Must happen before TextEdit renders so it doesn't also insert at cursor
+        {
+            let id = egui::Id::new("ip_input_textedit");
+            if ctx.memory(|m| m.has_focus(id)) {
+                ctx.input_mut(|i| {
+                    let ctrl_v = i.events.iter().position(|e| {
+                        matches!(e, egui::Event::Key {
+                            key: egui::Key::V,
+                            pressed: true,
+                            modifiers: m,
+                            ..
+                        } if m.command || m.ctrl)
+                    });
+                    if let Some(idx) = ctrl_v {
+                        // Remove the Ctrl+V key event
+                        i.events.remove(idx);
+                        // Read clipboard and replace text
+                        if let Ok(mut cb) = arboard::Clipboard::new() {
+                            if let Ok(text) = cb.get_text() {
+                                if !text.is_empty() {
+                                    self.address_input = text;
+                                    self.select_all_countdown = 2;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
         if self.select_all_countdown > 0 {
             let n = self.address_input.len();
             if n > 0 {
@@ -502,6 +531,26 @@ impl eframe::App for PingTestApp {
                                 self.status_msg = "已整理IP地址".to_string();
                             } else {
                                 self.status_msg = "未找到有效IP地址".to_string();
+                            }
+                        }
+                        ui.add_space(4.0);
+                        if ui.add(egui::Button::new("粘贴").small().frame(true)).clicked() {
+                            match arboard::Clipboard::new() {
+                                Ok(mut cb) => {
+                                    if let Ok(text) = cb.get_text() {
+                                        if !text.is_empty() {
+                                            self.address_input = text;
+                                            self.status_msg = "已从剪切板粘贴".to_string();
+                                        } else {
+                                            self.status_msg = "剪切板为空".to_string();
+                                        }
+                                    } else {
+                                        self.status_msg = "读取剪切板失败".to_string();
+                                    }
+                                }
+                                Err(_) => {
+                                    self.status_msg = "读取剪切板失败".to_string();
+                                }
                             }
                         }
                     });

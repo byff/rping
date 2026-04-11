@@ -61,11 +61,24 @@ jobs:
 
       - name: Build
         run: |
+          set -e
           # For Windows cross-compile: tell winres where windres is
           if [ "${{ matrix.target }}" = "x86_64-pc-windows-gnu" ]; then
             export WINDRES=x86_64-w64-mingw32-windres
+            echo "=== windres version ==="
+            x86_64-w64-mingw32-windres --version
+            echo "=== CARGO_CFG_TARGET_OS=$CARGO_CFG_TARGET_OS ==="
+            echo "=== CARGO_CFG_TARGET_ENV=$CARGO_CFG_TARGET_ENV ==="
+            echo "=== CARGO_MANIFEST_DIR contents ==="
+            ls -la assets/
+            echo "=== Running cargo build ==="
           fi
           cargo build --release --target ${{ matrix.target }}
+          echo "=== Build done ==="
+          if [ "${{ matrix.target }}" = "x86_64-pc-windows-gnu" ]; then
+            echo "=== Check exe for .rsrc section ==="
+            objdump -x target/${{ matrix.target }}/release/pingTest.exe | grep -i "rsrc\|icon" || echo "No .rsrc or icon found"
+          fi
 
       - name: Package .deb
         if: matrix.format == 'deb'

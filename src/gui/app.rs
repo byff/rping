@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use parking_lot::RwLock;
 use eframe::egui;
-use egui::{RichText, Layout, Align, Key, Modifiers};
+use egui::{RichText, Layout, Align};
 
 use crate::config::AppConfig;
 use crate::ping::{PingEngine, PingTarget, PingStats};
@@ -42,8 +42,8 @@ pub struct PingTestApp {
     // Focus input on first frame
     input_focus_requested: bool,
 
-    // Countdown to apply select-all after focus is granted
-    select_all_countdown: u8,
+    // Countdown to move cursor to end of input (after startup or double-click)
+    cursor_to_end_countdown: u8,
 }
 
 impl PingTestApp {
@@ -79,7 +79,7 @@ impl PingTestApp {
             theme_applied: false,
             last_cleaned_input: address_input,
             input_focus_requested: false,
-            select_all_countdown: 2,
+            cursor_to_end_countdown: 2,
         }
     }
 
@@ -353,29 +353,28 @@ impl eframe::App for PingTestApp {
             self.theme_applied = true;
         }
 
-        // Request focus on first frame
+        // On startup: request focus and move cursor to end for a few frames
         if !self.input_focus_requested {
             self.input_focus_requested = true;
-            self.select_all_countdown = 2;
+            self.cursor_to_end_countdown = 2;
             ctx.memory_mut(|m| {
                 m.request_focus(egui::Id::new("ip_input_textedit"));
             });
         }
 
-        // Inject Ctrl+A on frames when select-all is requested.
-        // TextEdit consumes events from ctx.input().events, so push before it renders.
-        if self.select_all_countdown > 0 {
+        // Apply cursor-to-end for a few frames after TextEdit has rendered
+        if self.cursor_to_end_countdown > 0 {
             let n = self.address_input.len();
             if n > 0 {
-                ctx.input_mut(|i| i.events.push(egui::Event::Key {
-                    key: Key::A,
-                    physical_key: Some(Key::A),
-                    pressed: true,
-                    repeat: false,
-                    modifiers: Modifiers::CTRL,
-                }));
+                let id = egui::Id::new("ip_input_textedit");
+                if let Some(mut state) = egui::widgets::text_edit::TextEditState::load(ctx, id) {
+                    use egui::text::CCursorRange;
+                    let end = egui::text::CCursor::new(n);
+                    state.cursor.set_char_range(Some(CCursorRange::two(end, end)));
+                    state.store(ctx, id);
+                }
             }
-            self.select_all_countdown -= 1;
+            self.cursor_to_end_countdown -= 1;
         }
 
         // Handle file drops
@@ -524,9 +523,9 @@ impl eframe::App for PingTestApp {
                             .id(egui::Id::new("ip_input_textedit"))
                             .frame(true)
                     );
-                    // Double-click TextEdit → select all
+                    // Double-click TextEdit → move cursor to end of text
                     if response.double_clicked() && !self.address_input.is_empty() {
-                        self.select_all_countdown = 2;
+                        self.cursor_to_end_countdown = 2;
                     }
                 });
             });

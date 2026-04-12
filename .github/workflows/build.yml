@@ -104,7 +104,7 @@ jobs:
             -v ${VERSION} \
             -a ${{ matrix.arch }} \
             -p dist/${PKG_NAME} \
-            -d "libc6" \
+            -d "libc6, libgtk-3-0, libayatana-appindicator3-1" \
             --description "High-performance multi-target ping tool | Powered by byff" \
             --maintainer "byff" \
             --vendor "byff" \

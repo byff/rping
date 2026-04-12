@@ -10,6 +10,14 @@ mod utils;
 use gui::app::PingTestApp;
 
 fn main() -> eframe::Result<()> {
+    // Initialize logging to stderr
+    env_logger::Builder::from_env(
+        env_logger::Env::default().default_filter_or("info")
+    ).format_timestamp_millis()
+     .init();
+
+    log::info!("PingTest starting...");
+
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([1100.0, 680.0])
@@ -23,7 +31,10 @@ fn main() -> eframe::Result<()> {
     eframe::run_native(
         "PingTest",
         options,
-        Box::new(|cc| Ok(Box::new(PingTestApp::new(cc)))),
+        Box::new(|cc| {
+            log::info!("Creating PingTestApp...");
+            Ok(Box::new(PingTestApp::new(cc)))
+        }),
     )
 }
 

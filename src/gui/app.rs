@@ -279,8 +279,24 @@ impl PingTestApp {
             dialog = dialog.set_directory(dir);
         }
 
-        if let Some(path) = dialog.pick_file() {
-            self.handle_file_drop(path);
+        match dialog.pick_file() {
+            Some(path) => {
+                self.handle_file_drop(path);
+            }
+            None => {
+                // Dialog returned None - either cancelled or failed to open
+                // On Linux this often means GTK3/portal issue
+                #[cfg(target_os = "linux")]
+                {
+                    self.dialog_state.show_error(
+                        "文件对话框无法打开",
+                        "请确保已安装 GTK3 和相关文件选择器组件：\n\n"
+                        "Ubuntu/Debian: sudo apt install libgtk-3-0\n"
+                        "Fedora: sudo dnf install gtk3\n"
+                        "或使用 snap/flatpak 安装",
+                    );
+                }
+            }
         }
     }
 
@@ -294,12 +310,25 @@ impl PingTestApp {
             dialog = dialog.set_directory(dir);
         }
 
-        if let Some(path) = dialog.save_file() {
-            match excel::export_results(&path, &self.targets, &self.config.export) {
-                Ok(_) => self.status_msg = format!("已导出: {}", path.display()),
-                Err(e) => self.dialog_state.show_error("导出失败", &format!(
-                    "文件: {}\n\n错误: {}", path.display(), e
-                )),
+        match dialog.save_file() {
+            Some(path) => {
+                match excel::export_results(&path, &self.targets, &self.config.export) {
+                    Ok(_) => self.status_msg = format!("已导出: {}", path.display()),
+                    Err(e) => self.dialog_state.show_error("导出失败", &format!(
+                        "文件: {}\n\n错误: {}", path.display(), e
+                    )),
+                }
+            }
+            None => {
+                #[cfg(target_os = "linux")]
+                {
+                    self.dialog_state.show_error(
+                        "文件对话框无法打开",
+                        "请确保已安装 GTK3 和相关文件选择器组件：\n\n"
+                        "Ubuntu/Debian: sudo apt install libgtk-3-0\n"
+                        "Fedora: sudo dnf install gtk3",
+                    );
+                }
             }
         }
     }
@@ -336,6 +365,14 @@ impl PingTestApp {
                     Err(e) => self.dialog_state.show_error("插入结果失败", &format!(
                         "文件: {}\n\n错误: {}", path.display(), e
                     )),
+                }
+            } else {
+                #[cfg(target_os = "linux")]
+                {
+                    self.dialog_state.show_error(
+                        "文件对话框无法打开",
+                        "请确保已安装 GTK3：\n sudo apt install libgtk-3-0",
+                    );
                 }
             }
         }
@@ -564,14 +601,7 @@ impl eframe::App for PingTestApp {
         });
     }
 
-    #[cfg(not(windows))]
     fn on_exit(&mut self, _gl: Option<&eframe::glow::Context>) {
-        self.engine.read().stop();
-        self.config.save();
-    }
-
-    #[cfg(windows)]
-    fn on_exit(&mut self) {
         self.engine.read().stop();
         self.config.save();
     }

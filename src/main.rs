@@ -9,21 +9,27 @@ mod utils;
 
 use gui::app::PingTestApp;
 
-fn write_file(path: &std::path::Path, content: &str) {
-    let _ = std::fs::write(path, content);
+fn write_log(path: &std::path::Path, content: &str) {
+    if let Err(e) = std::fs::write(path, content) {
+        eprintln!("Failed to write log {}: {}", path.display(), e);
+    }
 }
 
 fn main() {
-    // Write startup marker - confirms binary at least reached main()
-    if let Some(exe) = std::env::current_exe().ok() {
-        write_file(&exe.with_file_name("pingtest_started.txt"), "started\n");
-    }
+    let exe = std::env::current_exe().ok();
+    let log_dir = exe.as_ref().map(|p| p.parent().unwrap_or(p));
 
-    // Set up panic hook
+    // Panic hook - writes to file before anything else
     std::panic::set_hook(Box::new(|panic_info| {
-        let msg = format!("PANIC: {}\n", panic_info);
-        if let Some(exe) = std::env::current_exe().ok() {
-            write_file(&exe.with_file_name("pingtest_panic.log"), &msg);
+        let msg = format!("[{}] PANIC: {}\n",
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0),
+            panic_info);
+        eprintln!("{}", msg);
+        if let Some(ref dir) = log_dir {
+            write_log(&dir.join("pingtest_panic.log"), &msg);
         }
     }));
 
@@ -57,12 +63,11 @@ fn main() {
     ) {
         Ok(_) => {
             log::info!("PingTest exited normally");
-            write_file(&std::env::current_exe().unwrap().with_file_name("pingtest_exit.txt"), "exited_ok\n");
         }
         Err(e) => {
             log::error!("eframe error: {:?}", e);
-            if let Some(exe) = std::env::current_exe().ok() {
-                write_file(&exe.with_file_name("pingtest_error.log"), &format!("eframe error: {:?}\n", e));
+            if let Some(ref dir) = log_dir {
+                write_log(&dir.join("pingtest_error.log"), &format!("eframe error: {:?}\n", e));
             }
         }
     }
@@ -72,6 +77,9 @@ fn load_icon() -> egui::IconData {
     let png_data = include_bytes!("../assets/rping.png");
     match eframe::icon_data::from_png_bytes(png_data) {
         Ok(icon) => icon,
-        Err(_) => egui::IconData::default(),
+        Err(e) => {
+            log::warn!("Failed to load icon: {:?}", e);
+            egui::IconData::default()
+        }
     }
 }

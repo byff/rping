@@ -288,13 +288,11 @@ impl PingTestApp {
                 // On Linux this often means GTK3/portal issue
                 #[cfg(target_os = "linux")]
                 {
-                    self.dialog_state.show_error(
-                        "文件对话框无法打开",
-                        "请确保已安装 GTK3 和相关文件选择器组件：\n\n"
-                        "Ubuntu/Debian: sudo apt install libgtk-3-0\n"
-                        "Fedora: sudo dnf install gtk3\n"
-                        "或使用 snap/flatpak 安装",
-                    );
+                    let msg = "请确保已安装 GTK3 和相关文件选择器组件：\n\n\
+                        Ubuntu/Debian: sudo apt install libgtk-3-0\n\
+                        Fedora: sudo dnf install gtk3\n\
+                        或使用 snap/flatpak 安装";
+                    self.dialog_state.show_error("文件对话框无法打开", msg);
                 }
             }
         }
@@ -322,12 +320,10 @@ impl PingTestApp {
             None => {
                 #[cfg(target_os = "linux")]
                 {
-                    self.dialog_state.show_error(
-                        "文件对话框无法打开",
-                        "请确保已安装 GTK3 和相关文件选择器组件：\n\n"
-                        "Ubuntu/Debian: sudo apt install libgtk-3-0\n"
-                        "Fedora: sudo dnf install gtk3",
-                    );
+                    let msg = "请确保已安装 GTK3 和相关文件选择器组件：\n\n\
+                        Ubuntu/Debian: sudo apt install libgtk-3-0\n\
+                        Fedora: sudo dnf install gtk3";
+                    self.dialog_state.show_error("文件对话框无法打开", msg);
                 }
             }
         }

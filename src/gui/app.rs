@@ -342,8 +342,12 @@ impl PingTestApp {
     }
 }
 
+// Non-Windows uses glow, needs the glow::Context param in on_exit
+// Windows uses wgpu, on_exit takes no param
 impl eframe::App for PingTestApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        // On startup: request focus and inject Ctrl+A for a few frames
+        if !self.input_focus_requested {
         if !self.theme_applied {
             theme::apply_theme(ctx);
             self.theme_applied = true;
@@ -562,7 +566,14 @@ impl eframe::App for PingTestApp {
         });
     }
 
+    #[cfg(not(windows))]
     fn on_exit(&mut self, _gl: Option<&eframe::glow::Context>) {
+        self.engine.read().stop();
+        self.config.save();
+    }
+
+    #[cfg(windows)]
+    fn on_exit(&mut self) {
         self.engine.read().stop();
         self.config.save();
     }

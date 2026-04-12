@@ -72,8 +72,8 @@ impl Default for AppConfig {
 impl Default for PingConfig {
     fn default() -> Self {
         Self {
-            timeout_ms: 3000,
-            packet_size: 32,
+            timeout_ms: 1000,
+            packet_size: 128,
             interval_ms: 1000,
             max_concurrent: 200,
         }
@@ -117,6 +117,18 @@ impl Default for ExportConfig {
 
 impl AppConfig {
     pub fn config_path() -> PathBuf {
+        // Use XDG config directory on Linux, exe directory on Windows
+        #[cfg(target_os = "linux")]
+        {
+            if let Ok(xdg) = std::env::var("XDG_CONFIG_HOME") {
+                return PathBuf::from(xdg).join("pingtest").join("config.json");
+            }
+            if let Ok(home) = std::env::var("HOME") {
+                return PathBuf::from(home).join(".config").join("pingtest").join("config.json");
+            }
+        }
+        
+        // Fallback to exe directory
         let exe_dir = std::env::current_exe()
             .ok()
             .and_then(|p| p.parent().map(|p| p.to_path_buf()))
@@ -138,6 +150,10 @@ impl AppConfig {
 
     pub fn save(&self) {
         let path = Self::config_path();
+        // Create parent directory if needed
+        if let Some(parent) = path.parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
         if let Ok(content) = serde_json::to_string_pretty(self) {
             let _ = std::fs::write(path, content);
         }

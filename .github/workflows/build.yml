@@ -84,17 +84,35 @@ jobs:
           echo "=== Build done ==="
           ls -la target/${{ matrix.target }}/release/pingTest* 2>/dev/null || true
 
+      - name: Install ImageMagick (for icon generation)
+        if: matrix.format == 'deb'
+        run: |
+          sudo apt-get install -y -qq imagemagick
+
+      - name: Generate multi-size icons
+        if: matrix.format == 'deb'
+        run: |
+          mkdir -p assets/hicolor
+          for size in 16 24 32 48 64 128 256 512; do
+            dir="assets/hicolor/${size}x${size}/apps"
+            mkdir -p "$dir"
+            convert assets/rping.png -resize ${size}x${size} "$dir/rping.png"
+          done
+          echo "=== Generated multi-size icons ==="
+          ls -laR assets/hicolor/
+
       - name: Package .deb
         if: matrix.format == 'deb'
         run: |
           PKG_NAME="pingTest_${VERSION}_${{ matrix.arch }}.deb"
           mkdir -p dist
-          ICON_DIR="pkg/usr/share/icons/hicolor/256x256/apps"
-          mkdir -p "$ICON_DIR"
-          cp assets/rping.png "$ICON_DIR/rping.png"
+          # Copy hicolor icons
+          ICON_DIR="pkg/usr/share/icons/hicolor"
+          cp -r assets/hicolor "$ICON_DIR"
+          # Copy .desktop file
           DESKTOP_DIR="pkg/usr/share/applications"
           mkdir -p "$DESKTOP_DIR"
-          cp assets/rping.desktop "$DESKTOP_DIR/rping.desktop"
+          sed 's|Icon=.*|Icon=/usr/share/icons/hicolor/256x256/apps/rping.png|' assets/rping.desktop > "$DESKTOP_DIR/pingtest.desktop"
           fpm -s dir -t deb \
             -n pingtest \
             -v ${VERSION} \

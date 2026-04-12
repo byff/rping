@@ -9,18 +9,29 @@ mod utils;
 
 use gui::app::PingTestApp;
 
-fn write_panic(panic_info: &std::panic::PanicInfo) {
-    let msg = format!("PANIC: {}\n", panic_info);
-    if let Some(exe) = std::env::current_exe().ok() {
-        let log_path = exe.with_file_name("pingtest_panic.log");
-        let _ = std::fs::write(&log_path, &msg);
-    }
-    let _ = std::eprintln!("{}", &msg);
+fn write_file(path: &std::path::Path, content: &str) {
+    let _ = std::fs::write(path, content);
 }
 
 fn main() {
-    // Set up panic hook FIRST
-    std::panic::set_hook(Box::new(|pi| write_panic(pi)));
+    // Write startup marker - confirms binary at least reached main()
+    if let Some(exe) = std::env::current_exe().ok() {
+        write_file(&exe.with_file_name("pingtest_started.txt"), "started\n");
+    }
+
+    // Set up panic hook
+    std::panic::set_hook(Box::new(|panic_info| {
+        let msg = format!("PANIC: {}\n", panic_info);
+        if let Some(exe) = std::env::current_exe().ok() {
+            write_file(&exe.with_file_name("pingtest_panic.log"), &msg);
+        }
+    }));
+
+    // Initialize logging
+    let _ = env_logger::Builder::from_env(
+        env_logger::Env::default().default_filter_or("info")
+    ).format_timestamp_millis()
+     .try_init();
 
     log::info!("PingTest starting...");
 
@@ -45,10 +56,8 @@ fn main() {
         }),
     ) {
         log::error!("eframe error: {:?}", e);
-        // Also write to file
         if let Some(exe) = std::env::current_exe().ok() {
-            let msg = format!("eframe error: {:?}\n", e);
-            let _ = std::fs::write(exe.with_file_name("pingtest_error.log"), &msg);
+            write_file(&exe.with_file_name("pingtest_error.log"), &format!("eframe error: {:?}\n", e));
         }
     }
 

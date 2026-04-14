@@ -44,31 +44,21 @@ jobs:
 
       - name: Build Tauri (no bundle)
         run: |
-          echo "=== CWD ==="
-          pwd
-          ls -la
-          echo "=== Target dir ==="
           if [ "${{ matrix.target }}" = "x86_64-pc-windows-gnu" ]; then
             export WINDRES=x86_64-w64-mingw32-windres
           fi
           cargo tauri build --target ${{ matrix.target }} --no-bundle
-          echo "=== Build output ==="
-          find . -name "pingTest.exe" 2>/dev/null | head -10
-          echo "=== Done ==="
 
       - name: Package .exe
         run: |
           mkdir -p dist
-          echo "=== Package CWD ==="
-          pwd
-          echo "=== Finding exe ==="
-          EXE_PATH=$(find . -name "pingTest.exe" 2>/dev/null | head -1)
+          # find exe in current working directory (repo root)
+          EXE_PATH=$(find . -name "pingTest.exe" -type f 2>/dev/null | head -1)
           if [ -n "$EXE_PATH" ] && [ -f "$EXE_PATH" ]; then
             cp "$EXE_PATH" "dist/${{ matrix.name }}"
-            echo "SUCCESS: copied $EXE_PATH to dist/${{ matrix.name }}"
+            echo "SUCCESS: $EXE_PATH -> dist/${{ matrix.name }}"
           else
             echo "ERROR: pingTest.exe not found"
-            ls -la
           fi
           ls -la dist/
 

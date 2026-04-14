@@ -20,6 +20,10 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - uses: actions/checkout@v4
 
@@ -55,11 +59,9 @@ jobs:
       - name: Package .exe
         run: |
           mkdir -p dist
-          # find exe
           EXE_PATH=$(find . -name "pingTest.exe" -type f 2>/dev/null | head -1)
           if [ -n "$EXE_PATH" ] && [ -f "$EXE_PATH" ]; then
             cp "$EXE_PATH" "dist/${{ matrix.name }}"
-            echo "SUCCESS: copied $EXE_PATH"
           fi
           ls -la dist/
 

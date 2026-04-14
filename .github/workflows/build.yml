@@ -49,18 +49,19 @@ jobs:
           fi
           cargo tauri build --target ${{ matrix.target }} --no-bundle
           echo "=== Build done ==="
-          ls -la pingTest/target/${{ matrix.target }}/release/pingTest.exe 2>/dev/null || echo "exe not found"
 
       - name: Package .exe
         run: |
           mkdir -p dist
-          EXE="pingTest/target/${{ matrix.target }}/release/pingTest.exe"
+          # cargo builds to src-tauri/target/ (workspace member)
+          EXE="src-tauri/target/${{ matrix.target }}/release/pingTest.exe"
           if [ -f "$EXE" ]; then
             cp "$EXE" "dist/${{ matrix.name }}"
-            echo "SUCCESS: copied to dist/${{ matrix.name }}"
+            echo "SUCCESS: copied $EXE to dist/${{ matrix.name }}"
+            ls -la "dist/${{ matrix.name }}"
           else
             echo "ERROR: $EXE not found"
-            ls -la pingTest/target/${{ matrix.target }}/release/ 2>/dev/null || echo "release dir missing"
+            ls -la src-tauri/target/${{ matrix.target }}/release/ 2>/dev/null || echo "release dir missing"
           fi
           ls -la dist/
 

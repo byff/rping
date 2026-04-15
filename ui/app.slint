@@ -114,13 +114,13 @@ export component MainWindow {
                     horizontal_stretch: 0;
                     width: 70px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Start";
                         color: white;
                         font_size: 13px;
-                        font_weight: bold;
+                        font_weight: 700;
                         horizontal_alignment: center;
                         vertical_alignment: center;
                     }
@@ -142,13 +142,13 @@ export component MainWindow {
                     background: !root.is_running ? root.text_dim : root.fail;
                     width: 70px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Stop";
                         color: white;
                         font_size: 13px;
-                        font_weight: bold;
+                        font_weight: 700;
                         horizontal_alignment: center;
                         vertical_alignment: center;
                     }
@@ -170,13 +170,13 @@ export component MainWindow {
                     background: root.warning;
                     width: 80px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Refresh";
                         color: white;
                         font_size: 13px;
-                        font_weight: bold;
+                        font_weight: 700;
                         horizontal_alignment: center;
                         vertical_alignment: center;
                     }
@@ -202,7 +202,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 70px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Import";
@@ -225,7 +225,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 100px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Export Results";
@@ -248,7 +248,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 110px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Insert to Source";
@@ -274,7 +274,7 @@ export component MainWindow {
                     background: root.text_dim;
                     width: 80px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Settings";
@@ -297,7 +297,7 @@ export component MainWindow {
                     background: root.text_dim;
                     width: 70px;
                     height: 32px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "About";
@@ -335,14 +335,14 @@ export component MainWindow {
                         text: "IP Addresses";
                         color: root.accent;
                         font_size: 12px;
-                        font_weight: bold;
+                        font_weight: 700;
                     }
 
                     TextEdit {
                         placeholder_text: "Enter IP addresses, one per line or CIDR format";
                         text <=> root.input_text;
                         font_size: 13px;
-                        wrap: true;
+                        wrap: TextWrap.wrap;
                         horizontal_stretch: 1;
                         vertical_stretch: 1;
                     }
@@ -361,7 +361,7 @@ export component MainWindow {
 
                     // Table Header
                     Rectangle {
-                        background: #252830;
+                        background-color: #252830;
                         height: 32px;
 
                         HorizontalLayout {
@@ -372,13 +372,13 @@ export component MainWindow {
                             // # Column
                             Rectangle {
                                 width: 40px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "#";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -391,13 +391,13 @@ export component MainWindow {
                             // Hostname Column
                             Rectangle {
                                 width: 130px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Hostname";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -410,13 +410,13 @@ export component MainWindow {
                             // IP Column
                             Rectangle {
                                 width: 120px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "IP";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -429,13 +429,13 @@ export component MainWindow {
                             // Success Column
                             Rectangle {
                                 width: 60px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Success";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -448,13 +448,13 @@ export component MainWindow {
                             // Fail Column
                             Rectangle {
                                 width: 50px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Fail";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -467,13 +467,13 @@ export component MainWindow {
                             // Fail% Column
                             Rectangle {
                                 width: 60px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Fail%";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -486,13 +486,13 @@ export component MainWindow {
                             // Total Column
                             Rectangle {
                                 width: 55px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Total";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -505,13 +505,13 @@ export component MainWindow {
                             // RTT Column
                             Rectangle {
                                 width: 80px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "RTT(ms)";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -524,13 +524,13 @@ export component MainWindow {
                             // Max Column
                             Rectangle {
                                 width: 75px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Max";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -543,13 +543,13 @@ export component MainWindow {
                             // Min Column
                             Rectangle {
                                 width: 75px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Min";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -562,13 +562,13 @@ export component MainWindow {
                             // Avg Column
                             Rectangle {
                                 width: 75px;
-                                cursor: pointer;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Avg";
                                     color: root.accent;
                                     font_size: 12px;
-                                    font_weight: bold;
+                                    font_weight: 700;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -762,7 +762,7 @@ export component MainWindow {
                     text: "Settings";
                     color: root.accent;
                     font_size: 18px;
-                    font_weight: bold;
+                    font_weight: 700;
                     horizontal_alignment: center;
                 }
 
@@ -780,7 +780,7 @@ export component MainWindow {
                             text: "Ping Parameters";
                             color: root.accent;
                             font_size: 13px;
-                            font_weight: bold;
+                            font_weight: 700;
                         }
 
                         // Timeout Slider
@@ -903,7 +903,7 @@ export component MainWindow {
                             text: "Options";
                             color: root.accent;
                             font_size: 13px;
-                            font_weight: bold;
+                            font_weight: 700;
                         }
 
                         // CIDR Checkbox
@@ -970,7 +970,7 @@ export component MainWindow {
                             text: "Export Fields";
                             color: root.accent;
                             font_size: 13px;
-                            font_weight: bold;
+                            font_weight: 700;
                         }
 
                         // First row of checkboxes
@@ -1055,13 +1055,13 @@ export component MainWindow {
                         background: root.success;
                         width: 80px;
                         height: 32px;
-                        cursor: pointer;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Save";
                             color: white;
                             font_size: 13px;
-                            font_weight: bold;
+                            font_weight: 700;
                             horizontal_alignment: center;
                             vertical_alignment: center;
                         }
@@ -1079,7 +1079,7 @@ export component MainWindow {
                         background: root.text_dim;
                         width: 80px;
                         height: 32px;
-                        cursor: pointer;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Reset";
@@ -1103,13 +1103,13 @@ export component MainWindow {
                         background: root.fail;
                         width: 80px;
                         height: 32px;
-                        cursor: pointer;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Close";
                             color: white;
                             font_size: 13px;
-                            font_weight: bold;
+                            font_weight: 700;
                             horizontal_alignment: center;
                             vertical_alignment: center;
                         }
@@ -1150,7 +1150,7 @@ export component MainWindow {
                     text: "⚠ Warning";
                     color: root.warning;
                     font_size: 18px;
-                    font_weight: bold;
+                    font_weight: 700;
                     horizontal_alignment: center;
                 }
 
@@ -1160,7 +1160,7 @@ export component MainWindow {
                     color: white;
                     font_size: 13px;
                     horizontal_alignment: center;
-                    wrap: true;
+                    wrap: TextWrap.wrap;
                 }
 
                 // Buttons
@@ -1173,13 +1173,13 @@ export component MainWindow {
                         background: root.success;
                         width: 100px;
                         height: 32px;
-                        cursor: pointer;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Continue";
                             color: white;
                             font_size: 13px;
-                            font_weight: bold;
+                            font_weight: 700;
                             horizontal_alignment: center;
                             vertical_alignment: center;
                         }
@@ -1199,13 +1199,13 @@ export component MainWindow {
                         background: root.fail;
                         width: 80px;
                         height: 32px;
-                        cursor: pointer;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Cancel";
                             color: white;
                             font_size: 13px;
-                            font_weight: bold;
+                            font_weight: 700;
                             horizontal_alignment: center;
                             vertical_alignment: center;
                         }
@@ -1247,7 +1247,7 @@ export component MainWindow {
                     text: "PingTest";
                     color: root.accent;
                     font_size: 24px;
-                    font_weight: bold;
+                    font_weight: 700;
                     horizontal_alignment: center;
                 }
 
@@ -1271,7 +1271,7 @@ export component MainWindow {
                     color: white;
                     font_size: 13px;
                     horizontal_alignment: center;
-                    wrap: true;
+                    wrap: TextWrap.wrap;
                 }
 
                 Rectangle { vertical_stretch: 1; }
@@ -1290,14 +1290,14 @@ export component MainWindow {
                     background: root.accent;
                     width: 100px;
                     height: 36px;
-                    cursor: pointer;
+                    cursor: MouseCursor.pointer;
                     horizontal_alignment: center;
 
                     Text {
                         text: "Close";
                         color: white;
                         font_size: 14px;
-                        font_weight: bold;
+                        font_weight: 700;
                         horizontal_alignment: center;
                         vertical_alignment: center;
                     }

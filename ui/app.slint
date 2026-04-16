@@ -88,40 +88,41 @@ export component MainWindow {
     callback close_about();
     callback sort_table(int);
 
-    width: 1000;
-    height: 700;
-    background: root.bg;
-    title: "PingTest";
+    Window {
+        background: root.bg;
+        title: "PingTest";
+        width: 1000px;
+        height: 700px;
 
-    // === MAIN LAYOUT ===
-    VerticalLayout {
-        padding: 0;
-        spacing: 0;
+        // === MAIN LAYOUT ===
+        VerticalLayout {
+        padding: 0px;
+        spacing: 0px;
 
         // === TOOLBAR ===
         Rectangle {
             background: root.window_fill;
-            height: 48;
+            height: 48px;
 
             HorizontalLayout {
-                padding: 8;
-                spacing: 8;
+                padding: 8px;
+                spacing: 8px;
 
                 // Start Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.is_running ? root.text_dim : root.success;
                     horizontal_stretch: 0;
-                    width: 70;
-                    height: 32;
+                    width: 70px;
+                    height: 32px;
 
                     Text {
                         text: "Start";
                         color: white;
-                        font_size: 13;
+                        font_size: 13px;
                         font_weight: 700;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -137,18 +138,18 @@ export component MainWindow {
 
                 // Stop Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: !root.is_running ? root.text_dim : root.fail;
-                    width: 70;
-                    height: 32;
+                    width: 70px;
+                    height: 32px;
 
                     Text {
                         text: "Stop";
                         color: white;
-                        font_size: 13;
+                        font_size: 13px;
                         font_weight: 700;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -164,18 +165,18 @@ export component MainWindow {
 
                 // Refresh Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.warning;
-                    width: 80;
-                    height: 32;
+                    width: 80px;
+                    height: 32px;
 
                     Text {
                         text: "Refresh";
                         color: white;
-                        font_size: 13;
+                        font_size: 13px;
                         font_weight: 700;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -187,25 +188,25 @@ export component MainWindow {
 
                 // Separator
                 Rectangle {
-                    width: 1;
+                    width: 1px;
                     background: root.text_dim;
                     horizontal_stretch: 0;
-                    width: 10;
+                    width: 10px;
                 }
 
                 // Import Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.accent;
-                    width: 70;
-                    height: 32;
+                    width: 70px;
+                    height: 32px;
 
                     Text {
                         text: "Import";
                         color: white;
-                        font_size: 13;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        font_size: 13px;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -217,17 +218,17 @@ export component MainWindow {
 
                 // Export Results Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.accent;
-                    width: 100;
-                    height: 32;
+                    width: 100px;
+                    height: 32px;
 
                     Text {
                         text: "Export Results";
                         color: white;
-                        font_size: 13;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        font_size: 13px;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -239,17 +240,17 @@ export component MainWindow {
 
                 // Insert to Source Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.accent;
-                    width: 110;
-                    height: 32;
+                    width: 110px;
+                    height: 32px;
 
                     Text {
                         text: "Insert to Source";
                         color: white;
-                        font_size: 13;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        font_size: 13px;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -264,17 +265,17 @@ export component MainWindow {
 
                 // Settings Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.text_dim;
-                    width: 80;
-                    height: 32;
+                    width: 80px;
+                    height: 32px;
 
                     Text {
                         text: "Settings";
                         color: white;
-                        font_size: 13;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        font_size: 13px;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -286,17 +287,17 @@ export component MainWindow {
 
                 // About Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.text_dim;
-                    width: 70;
-                    height: 32;
+                    width: 70px;
+                    height: 32px;
 
                     Text {
                         text: "About";
                         color: white;
-                        font_size: 13;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        font_size: 13px;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {
@@ -310,29 +311,29 @@ export component MainWindow {
 
         // === MAIN CONTENT AREA ===
         VerticalLayout {
-            padding: 10;
-            spacing: 10;
+            padding: 10px;
+            spacing: 10px;
             vertical_stretch: 1;
 
             // === IP INPUT SECTION ===
             Rectangle {
                 background: root.window_fill;
-                border_radius: 6;
-                height: 120;
+                border_radius: 6px;
+                height: 120px;
 
                 VerticalLayout {
-                    padding: 8;
+                    padding: 8px;
 
                     Text {
                         text: "IP Addresses";
                         color: root.accent;
-                        font_size: 12;
+                        font_size: 12px;
                         font_weight: 700;
                     }
 
-                    LineEdit {
+                    TextInput {
                         text <=> root.input_text;
-                        font_size: 13;
+                        font_size: 13px;
                         horizontal_stretch: 1;
                         vertical_stretch: 1;
                     }
@@ -342,34 +343,34 @@ export component MainWindow {
             // === RESULTS TABLE ===
             Rectangle {
                 background: root.window_fill;
-                border_radius: 6;
+                border_radius: 6px;
                 vertical_stretch: 1;
 
                 VerticalLayout {
-                    padding: 0;
-                    spacing: 0;
+                    padding: 0px;
+                    spacing: 0px;
 
                     // Table Header
                     Rectangle {
                         background: #252830;
-                        height: 32;
+                        height: 32px;
 
                         HorizontalLayout {
-                            padding-left: 4;
-                            padding-right: 4;
-                            spacing: 0;
+                            padding-left: 4px;
+                            padding-right: 4px;
+                            spacing: 0px;
 
                             // # Column
                             Rectangle {
-                                width: 40;
+                                width: 40px;
 
                                 Text {
                                     text: "#";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -379,15 +380,15 @@ export component MainWindow {
 
                             // Hostname Column
                             Rectangle {
-                                width: 130;
+                                width: 130px;
 
                                 Text {
                                     text: "Hostname";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -397,15 +398,15 @@ export component MainWindow {
 
                             // IP Column
                             Rectangle {
-                                width: 120;
+                                width: 120px;
 
                                 Text {
                                     text: "IP";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -415,15 +416,15 @@ export component MainWindow {
 
                             // Success Column
                             Rectangle {
-                                width: 60;
+                                width: 60px;
 
                                 Text {
                                     text: "Success";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -433,15 +434,15 @@ export component MainWindow {
 
                             // Fail Column
                             Rectangle {
-                                width: 50;
+                                width: 50px;
 
                                 Text {
                                     text: "Fail";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -451,15 +452,15 @@ export component MainWindow {
 
                             // Fail% Column
                             Rectangle {
-                                width: 60;
+                                width: 60px;
 
                                 Text {
                                     text: "Fail%";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -469,15 +470,15 @@ export component MainWindow {
 
                             // Total Column
                             Rectangle {
-                                width: 55;
+                                width: 55px;
 
                                 Text {
                                     text: "Total";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -487,15 +488,15 @@ export component MainWindow {
 
                             // RTT Column
                             Rectangle {
-                                width: 80;
+                                width: 80px;
 
                                 Text {
                                     text: "RTT(ms)";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -505,15 +506,15 @@ export component MainWindow {
 
                             // Max Column
                             Rectangle {
-                                width: 75;
+                                width: 75px;
 
                                 Text {
                                     text: "Max";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -523,15 +524,15 @@ export component MainWindow {
 
                             // Min Column
                             Rectangle {
-                                width: 75;
+                                width: 75px;
 
                                 Text {
                                     text: "Min";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -541,15 +542,15 @@ export component MainWindow {
 
                             // Avg Column
                             Rectangle {
-                                width: 75;
+                                width: 75px;
 
                                 Text {
                                     text: "Avg";
                                     color: root.accent;
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: 700;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 TouchArea {
@@ -565,122 +566,122 @@ export component MainWindow {
 
                         for row[i] in root.table_rows: Rectangle {
                             background: Math.mod(i, 2) == 0 ? root.window_fill : #1E2128;
-                            height: 28;
+                            height: 28px;
 
                             HorizontalLayout {
-                                padding-left: 4;
-                                padding-right: 4;
-                                spacing: 0;
+                                padding-left: 4px;
+                                padding-right: 4px;
+                                spacing: 0px;
 
                                 // # 
                                 Text {
-                                    width: 40;
+                                    width: 40px;
                                     text: row.num;
                                     color: root.text_dim;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Hostname
                                 Text {
-                                    width: 130;
+                                    width: 130px;
                                     text: row.hostname;
                                     color: white;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // IP with status color
                                 Text {
-                                    width: 120;
+                                    width: 120px;
                                     text: row.ip;
                                     color: row.status == 0 ? root.success : (row.status == 1 ? root.warning : (row.status == 2 ? root.fail : root.text_dim));
-                                    font_size: 12;
+                                    font_size: 12px;
                                     font_weight: row.status == 0 ? bold : normal;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Success
                                 Text {
-                                    width: 60;
+                                    width: 60px;
                                     text: row.success;
                                     color: root.success;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Fail
                                 Text {
-                                    width: 50;
+                                    width: 50px;
                                     text: row.fail;
                                     color: root.fail;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Fail% with color coding
                                 Text {
-                                    width: 60;
+                                    width: 60px;
                                     text: row.fail_pct;
                                     color: row.fail_pct == "-" ? root.text_dim : (row.fail_pct == "0%" ? root.success : (row.fail_pct == "10%" ? root.warning : (row.fail > 5 ? root.fail : root.warning)));
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Total
                                 Text {
-                                    width: 55;
+                                    width: 55px;
                                     text: row.total;
                                     color: white;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // RTT
                                 Text {
-                                    width: 80;
+                                    width: 80px;
                                     text: row.rtt;
                                     color: row.rtt == "-" ? root.text_dim : root.accent;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Max
                                 Text {
-                                    width: 75;
+                                    width: 75px;
                                     text: row.rtt_max;
                                     color: row.rtt_max == "-" ? root.text_dim : root.accent;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Min
                                 Text {
-                                    width: 75;
+                                    width: 75px;
                                     text: row.rtt_min;
                                     color: row.rtt_min == "-" ? root.text_dim : root.accent;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
 
                                 // Avg
                                 Text {
-                                    width: 75;
+                                    width: 75px;
                                     text: row.rtt_avg;
                                     color: row.rtt_avg == "-" ? root.text_dim : root.accent;
-                                    font_size: 12;
-                                    horizontal_alignment: HorizontalAlignment.center;
-                                    vertical_alignment: VerticalAlignment.center;
+                                    font_size: 12px;
+                                    horizontal_alignment: center;
+                                    vertical_alignment: center;
                                 }
                             }
                         }
@@ -692,16 +693,16 @@ export component MainWindow {
         // === STATUS BAR ===
         Rectangle {
             background: root.window_fill;
-            height: 28;
+            height: 28px;
 
             HorizontalLayout {
-                padding: 8;
+                padding: 8px;
 
                 Text {
                     text: root.status_message;
                     color: root.text_dim;
-                    font_size: 12;
-                    vertical_alignment: VerticalAlignment.center;
+                    font_size: 12px;
+                    vertical_alignment: center;
                 }
 
                 Rectangle { horizontal_stretch: 1; }
@@ -709,8 +710,8 @@ export component MainWindow {
                 Text {
                     text: "IPs: " + root.selected_ip_count;
                     color: root.text_dim;
-                    font_size: 12;
-                    vertical_alignment: VerticalAlignment.center;
+                    font_size: 12px;
+                    vertical_alignment: center;
                 }
             }
         }
@@ -726,143 +727,141 @@ export component MainWindow {
 
         Rectangle {
             background: root.window_fill;
-            border_radius: 8;
-            width: 500;
-            height: 520;
-            horizontal_center: parent.horizontal_center;
-            vertical_center: parent.vertical_center;
+            border_radius: 8px;
+            width: 500px;
+            height: 520px;
 
             VerticalLayout {
-                padding: 16;
-                spacing: 12;
+                padding: 16px;
+                spacing: 12px;
 
                 // Title
                 Text {
                     text: "Settings";
                     color: root.accent;
-                    font_size: 18;
+                    font_size: 18px;
                     font_weight: 700;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    horizontal_alignment: center;
                 }
 
                 // Ping Parameters Section
                 Rectangle {
                     background: root.bg;
-                    border_radius: 4;
-                    height: 180;
+                    border_radius: 4px;
+                    height: 180px;
 
                     VerticalLayout {
-                        padding: 12;
-                        spacing: 10;
+                        padding: 12px;
+                        spacing: 10px;
 
                         Text {
                             text: "Ping Parameters";
                             color: root.accent;
-                            font_size: 13;
+                            font_size: 13px;
                             font_weight: 700;
                         }
 
                         // Timeout Slider
                         HorizontalLayout {
-                            spacing: 8;
+                            spacing: 8px;
 
                             Text {
                                 text: "Timeout:";
                                 color: white;
-                                font_size: 12;
-                                width: 100;
+                                font_size: 12px;
+                                width: 100px;
                             }
 
                             Slider {
                                 value <=> root.timeout_value;
                                 minimum: 100;
                                 maximum: 10000;
-                                width: 200;
+                                width: 200px;
                             }
 
                             Text {
                                 text: root.timeout_value + "ms";
                                 color: root.text_dim;
-                                font_size: 12;
-                                width: 70;
+                                font_size: 12px;
+                                width: 70px;
                             }
                         }
 
                         // Packet Size Slider
                         HorizontalLayout {
-                            spacing: 8;
+                            spacing: 8px;
 
                             Text {
                                 text: "Packet Size:";
                                 color: white;
-                                font_size: 12;
-                                width: 100;
+                                font_size: 12px;
+                                width: 100px;
                             }
 
                             Slider {
                                 value <=> root.packet_size_value;
                                 minimum: 32;
                                 maximum: 65535;
-                                width: 200;
+                                width: 200px;
                             }
 
                             Text {
                                 text: root.packet_size_value + " B";
                                 color: root.text_dim;
-                                font_size: 12;
-                                width: 70;
+                                font_size: 12px;
+                                width: 70px;
                             }
                         }
 
                         // Interval Slider
                         HorizontalLayout {
-                            spacing: 8;
+                            spacing: 8px;
 
                             Text {
                                 text: "Interval:";
                                 color: white;
-                                font_size: 12;
-                                width: 100;
+                                font_size: 12px;
+                                width: 100px;
                             }
 
                             Slider {
                                 value <=> root.interval_value;
                                 minimum: 100;
                                 maximum: 5000;
-                                width: 200;
+                                width: 200px;
                             }
 
                             Text {
                                 text: root.interval_value + "ms";
                                 color: root.text_dim;
-                                font_size: 12;
-                                width: 70;
+                                font_size: 12px;
+                                width: 70px;
                             }
                         }
 
                         // Max Concurrent Slider
                         HorizontalLayout {
-                            spacing: 8;
+                            spacing: 8px;
 
                             Text {
                                 text: "Max Concurrent:";
                                 color: white;
-                                font_size: 12;
-                                width: 100;
+                                font_size: 12px;
+                                width: 100px;
                             }
 
                             Slider {
                                 value <=> root.max_concurrent_value;
                                 minimum: 1;
                                 maximum: 500;
-                                width: 200;
+                                width: 200px;
                             }
 
                             Text {
                                 text: root.max_concurrent_value + " threads";
                                 color: root.text_dim;
-                                font_size: 12;
-                                width: 70;
+                                font_size: 12px;
+                                width: 70px;
                             }
                         }
                     }
@@ -871,23 +870,23 @@ export component MainWindow {
                 // Options Section
                 Rectangle {
                     background: root.bg;
-                    border_radius: 4;
-                    height: 100;
+                    border_radius: 4px;
+                    height: 100px;
 
                     VerticalLayout {
-                        padding: 12;
-                        spacing: 8;
+                        padding: 12px;
+                        spacing: 8px;
 
                         Text {
                             text: "Options";
                             color: root.accent;
-                            font_size: 13;
+                            font_size: 13px;
                             font_weight: 700;
                         }
 
                         // CIDR Checkbox
                         HorizontalLayout {
-                            spacing: 8;
+                            spacing: 8px;
 
                             CheckBox {
                                 checked <=> root.cidr_enabled;
@@ -896,14 +895,14 @@ export component MainWindow {
                             Text {
                                 text: "Enable CIDR notation support";
                                 color: white;
-                                font_size: 12;
-                                vertical_alignment: VerticalAlignment.center;
+                                font_size: 12px;
+                                vertical_alignment: center;
                             }
                         }
 
                         // Remember Addresses Checkbox
                         HorizontalLayout {
-                            spacing: 8;
+                            spacing: 8px;
 
                             CheckBox {
                                 checked <=> root.remember_addresses;
@@ -912,14 +911,14 @@ export component MainWindow {
                             Text {
                                 text: "Remember addresses between sessions";
                                 color: white;
-                                font_size: 12;
-                                vertical_alignment: VerticalAlignment.center;
+                                font_size: 12px;
+                                vertical_alignment: center;
                             }
                         }
 
                         // Debug Mode Checkbox
                         HorizontalLayout {
-                            spacing: 8;
+                            spacing: 8px;
 
                             CheckBox {
                                 checked <=> root.debug_mode;
@@ -928,8 +927,8 @@ export component MainWindow {
                             Text {
                                 text: "Debug mode";
                                 color: white;
-                                font_size: 12;
-                                vertical_alignment: VerticalAlignment.center;
+                                font_size: 12px;
+                                vertical_alignment: center;
                             }
                         }
                     }
@@ -938,87 +937,87 @@ export component MainWindow {
                 // Export Fields Section
                 Rectangle {
                     background: root.bg;
-                    border_radius: 4;
-                    height: 120;
+                    border_radius: 4px;
+                    height: 120px;
 
                     VerticalLayout {
-                        padding: 12;
-                        spacing: 6;
+                        padding: 12px;
+                        spacing: 6px;
 
                         Text {
                             text: "Export Fields";
                             color: root.accent;
-                            font_size: 13;
+                            font_size: 13px;
                             font_weight: 700;
                         }
 
                         // First row of checkboxes
                         HorizontalLayout {
-                            spacing: 16;
+                            spacing: 16px;
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_hostname; }
-                                Text { text: "Hostname"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Hostname"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_ip; }
-                                Text { text: "IP"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "IP"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_success; }
-                                Text { text: "Success"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Success"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_fail; }
-                                Text { text: "Fail"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Fail"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_fail_percent; }
-                                Text { text: "Fail%"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Fail%"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
                         }
 
                         // Second row of checkboxes
                         HorizontalLayout {
-                            spacing: 16;
+                            spacing: 16px;
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_total; }
-                                Text { text: "Total"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Total"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_rtt; }
-                                Text { text: "RTT"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "RTT"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_max; }
-                                Text { text: "Max"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Max"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_min; }
-                                Text { text: "Min"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Min"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
-                                spacing: 4;
+                                spacing: 4px;
                                 CheckBox { checked <=> root.export_avg; }
-                                Text { text: "Avg"; color: white; font_size: 11; vertical_alignment: VerticalAlignment.center; }
+                                Text { text: "Avg"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
                         }
                     }
@@ -1026,22 +1025,22 @@ export component MainWindow {
 
                 // Buttons
                 HorizontalLayout {
-                    spacing: 12;
-                    height: 36;
+                    spacing: 12px;
+                    height: 36px;
 
                     Rectangle {
-                        border_radius: 4;
+                        border_radius: 4px;
                         background: root.success;
-                        width: 80;
-                        height: 32;
+                        width: 80px;
+                        height: 32px;
 
                         Text {
                             text: "Save";
                             color: white;
-                            font_size: 13;
+                            font_size: 13px;
                             font_weight: 700;
-                            horizontal_alignment: HorizontalAlignment.center;
-                            vertical_alignment: VerticalAlignment.center;
+                            horizontal_alignment: center;
+                            vertical_alignment: center;
                         }
 
                         TouchArea {
@@ -1053,17 +1052,17 @@ export component MainWindow {
                     }
 
                     Rectangle {
-                        border_radius: 4;
+                        border_radius: 4px;
                         background: root.text_dim;
-                        width: 80;
-                        height: 32;
+                        width: 80px;
+                        height: 32px;
 
                         Text {
                             text: "Reset";
                             color: white;
-                            font_size: 13;
-                            horizontal_alignment: HorizontalAlignment.center;
-                            vertical_alignment: VerticalAlignment.center;
+                            font_size: 13px;
+                            horizontal_alignment: center;
+                            vertical_alignment: center;
                         }
 
                         TouchArea {
@@ -1076,18 +1075,18 @@ export component MainWindow {
                     Rectangle { horizontal_stretch: 1; }
 
                     Rectangle {
-                        border_radius: 4;
+                        border_radius: 4px;
                         background: root.fail;
-                        width: 80;
-                        height: 32;
+                        width: 80px;
+                        height: 32px;
 
                         Text {
                             text: "Close";
                             color: white;
-                            font_size: 13;
+                            font_size: 13px;
                             font_weight: 700;
-                            horizontal_alignment: HorizontalAlignment.center;
-                            vertical_alignment: VerticalAlignment.center;
+                            horizontal_alignment: center;
+                            vertical_alignment: center;
                         }
 
                         TouchArea {
@@ -1111,51 +1110,49 @@ export component MainWindow {
 
         Rectangle {
             background: root.window_fill;
-            border_radius: 8;
-            width: 400;
-            height: 180;
-            horizontal_center: parent.horizontal_center;
-            vertical_center: parent.vertical_center;
+            border_radius: 8px;
+            width: 400px;
+            height: 180px;
 
             VerticalLayout {
-                padding: 20;
-                spacing: 16;
+                padding: 20px;
+                spacing: 16px;
 
                 // Warning Icon/Title
                 Text {
                     text: "⚠ Warning";
                     color: root.warning;
-                    font_size: 18;
+                    font_size: 18px;
                     font_weight: 700;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    horizontal_alignment: center;
                 }
 
                 // Warning Message
                 Text {
                     text: "You have entered more than 1000 IP addresses. This may cause high memory usage and slow performance. Do you want to continue?";
                     color: white;
-                    font_size: 13;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    font_size: 13px;
+                    horizontal_alignment: center;
                 }
 
                 // Buttons
                 HorizontalLayout {
-                    spacing: 16;
-                    height: 36;
+                    spacing: 16px;
+                    height: 36px;
 
                     Rectangle {
-                        border_radius: 4;
+                        border_radius: 4px;
                         background: root.success;
-                        width: 100;
-                        height: 32;
+                        width: 100px;
+                        height: 32px;
 
                         Text {
                             text: "Continue";
                             color: white;
-                            font_size: 13;
+                            font_size: 13px;
                             font_weight: 700;
-                            horizontal_alignment: HorizontalAlignment.center;
-                            vertical_alignment: VerticalAlignment.center;
+                            horizontal_alignment: center;
+                            vertical_alignment: center;
                         }
 
                         TouchArea {
@@ -1169,18 +1166,18 @@ export component MainWindow {
                     Rectangle { horizontal_stretch: 1; }
 
                     Rectangle {
-                        border_radius: 4;
+                        border_radius: 4px;
                         background: root.fail;
-                        width: 80;
-                        height: 32;
+                        width: 80px;
+                        height: 32px;
 
                         Text {
                             text: "Cancel";
                             color: white;
-                            font_size: 13;
+                            font_size: 13px;
                             font_weight: 700;
-                            horizontal_alignment: HorizontalAlignment.center;
-                            vertical_alignment: VerticalAlignment.center;
+                            horizontal_alignment: center;
+                            vertical_alignment: center;
                         }
 
                         TouchArea {
@@ -1205,45 +1202,43 @@ export component MainWindow {
 
         Rectangle {
             background: root.window_fill;
-            border_radius: 8;
-            width: 360;
-            height: 280;
-            horizontal_center: parent.horizontal_center;
-            vertical_center: parent.vertical_center;
+            border_radius: 8px;
+            width: 360px;
+            height: 280px;
 
             VerticalLayout {
-                padding: 24;
-                spacing: 12;
+                padding: 24px;
+                spacing: 12px;
 
                 // App Name
                 Text {
                     text: "PingTest";
                     color: root.accent;
-                    font_size: 24;
+                    font_size: 24px;
                     font_weight: 700;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    horizontal_alignment: center;
                 }
 
                 // Version
                 Text {
                     text: "Version v1.1.0";
                     color: root.text_dim;
-                    font_size: 14;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    font_size: 14px;
+                    horizontal_alignment: center;
                 }
 
                 // Separator
                 Rectangle {
                     background: root.text_dim;
-                    height: 1;
+                    height: 1px;
                 }
 
                 // Description
                 Text {
                     text: "A powerful network ping testing tool with support for single IPs, CIDR notation, concurrent pinging, and detailed statistics.";
                     color: white;
-                    font_size: 13;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    font_size: 13px;
+                    horizontal_alignment: center;
                 }
 
                 Rectangle { vertical_stretch: 1; }
@@ -1252,25 +1247,25 @@ export component MainWindow {
                 Text {
                     text: "© 2026 PingTest. All rights reserved.";
                     color: root.text_dim;
-                    font_size: 12;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    font_size: 12px;
+                    horizontal_alignment: center;
                 }
 
                 // Close Button
                 Rectangle {
-                    border_radius: 4;
+                    border_radius: 4px;
                     background: root.accent;
-                    width: 100;
-                    height: 36;
-                    horizontal_alignment: HorizontalAlignment.center;
+                    width: 100px;
+                    height: 36px;
+                    horizontal_alignment: center;
 
                     Text {
                         text: "Close";
                         color: white;
-                        font_size: 14;
+                        font_size: 14px;
                         font_weight: 700;
-                        horizontal_alignment: HorizontalAlignment.center;
-                        vertical_alignment: VerticalAlignment.center;
+                        horizontal_alignment: center;
+                        vertical_alignment: center;
                     }
 
                     TouchArea {

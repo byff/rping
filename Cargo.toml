@@ -14,7 +14,7 @@ path = "src/main.rs"
 
 [dependencies]
 # GUI
-slint = "1.15"
+slint = "=1.15.1"
 
 # Async runtime
 tokio = { version = "1", features = ["rt-multi-thread", "net", "time", "sync", "macros"] }
@@ -53,7 +53,7 @@ parking_lot = "0.12"
 regex = "1"
 
 [build-dependencies]
-slint-build = "1.15"
+slint-build = "=1.15.1"
 winres = "0.1"
 
 [profile.release]

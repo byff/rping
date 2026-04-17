@@ -17,7 +17,7 @@ struct TableRow {
     status: int  // -1=unknown, 0=alive, 1=partial, 2=failed
 }
 
-export component MainWindow {
+export component MainWindow inherits Window {
     // === COLOR PALETTE ===
     property <color> accent: #409CFF;
     property <color> success: #50C878;
@@ -114,8 +114,7 @@ export component MainWindow {
                     horizontal_stretch: 0;
                     width: 70px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "Start";
                         color: white;
@@ -142,8 +141,7 @@ export component MainWindow {
                     background: !root.is_running ? root.text_dim : root.fail;
                     width: 70px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "Stop";
                         color: white;
@@ -170,8 +168,7 @@ export component MainWindow {
                     background: root.warning;
                     width: 80px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "Refresh";
                         color: white;
@@ -202,8 +199,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 70px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "Import";
                         color: white;
@@ -225,8 +221,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 100px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "Export Results";
                         color: white;
@@ -248,8 +243,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 110px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "Insert to Source";
                         color: white;
@@ -274,8 +268,7 @@ export component MainWindow {
                     background: root.text_dim;
                     width: 80px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "Settings";
                         color: white;
@@ -297,8 +290,7 @@ export component MainWindow {
                     background: root.text_dim;
                     width: 70px;
                     height: 32px;
-                    cursor: MouseCursor.pointer;
-
+                    
                     Text {
                         text: "About";
                         color: white;
@@ -372,8 +364,7 @@ export component MainWindow {
                             // # Column
                             Rectangle {
                                 width: 40px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "#";
                                     color: root.accent;
@@ -391,8 +382,7 @@ export component MainWindow {
                             // Hostname Column
                             Rectangle {
                                 width: 130px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Hostname";
                                     color: root.accent;
@@ -410,8 +400,7 @@ export component MainWindow {
                             // IP Column
                             Rectangle {
                                 width: 120px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "IP";
                                     color: root.accent;
@@ -429,8 +418,7 @@ export component MainWindow {
                             // Success Column
                             Rectangle {
                                 width: 60px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Success";
                                     color: root.accent;
@@ -448,8 +436,7 @@ export component MainWindow {
                             // Fail Column
                             Rectangle {
                                 width: 50px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Fail";
                                     color: root.accent;
@@ -467,8 +454,7 @@ export component MainWindow {
                             // Fail% Column
                             Rectangle {
                                 width: 60px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Fail%";
                                     color: root.accent;
@@ -486,8 +472,7 @@ export component MainWindow {
                             // Total Column
                             Rectangle {
                                 width: 55px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Total";
                                     color: root.accent;
@@ -505,8 +490,7 @@ export component MainWindow {
                             // RTT Column
                             Rectangle {
                                 width: 80px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "RTT(ms)";
                                     color: root.accent;
@@ -524,8 +508,7 @@ export component MainWindow {
                             // Max Column
                             Rectangle {
                                 width: 75px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Max";
                                     color: root.accent;
@@ -543,8 +526,7 @@ export component MainWindow {
                             // Min Column
                             Rectangle {
                                 width: 75px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Min";
                                     color: root.accent;
@@ -562,8 +544,7 @@ export component MainWindow {
                             // Avg Column
                             Rectangle {
                                 width: 75px;
-                                cursor: MouseCursor.pointer;
-
+                                
                                 Text {
                                     text: "Avg";
                                     color: root.accent;
@@ -1055,8 +1036,7 @@ export component MainWindow {
                         background: root.success;
                         width: 80px;
                         height: 32px;
-                        cursor: MouseCursor.pointer;
-
+                        
                         Text {
                             text: "Save";
                             color: white;
@@ -1079,8 +1059,7 @@ export component MainWindow {
                         background: root.text_dim;
                         width: 80px;
                         height: 32px;
-                        cursor: MouseCursor.pointer;
-
+                        
                         Text {
                             text: "Reset";
                             color: white;
@@ -1103,8 +1082,7 @@ export component MainWindow {
                         background: root.fail;
                         width: 80px;
                         height: 32px;
-                        cursor: MouseCursor.pointer;
-
+                        
                         Text {
                             text: "Close";
                             color: white;
@@ -1173,8 +1151,7 @@ export component MainWindow {
                         background: root.success;
                         width: 100px;
                         height: 32px;
-                        cursor: MouseCursor.pointer;
-
+                        
                         Text {
                             text: "Continue";
                             color: white;
@@ -1199,8 +1176,7 @@ export component MainWindow {
                         background: root.fail;
                         width: 80px;
                         height: 32px;
-                        cursor: MouseCursor.pointer;
-
+                        
                         Text {
                             text: "Cancel";
                             color: white;
@@ -1290,8 +1266,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 100px;
                     height: 36px;
-                    cursor: MouseCursor.pointer;
-                    horizontal_alignment: center;
+                                        horizontal_alignment: center;
 
                     Text {
                         text: "Close";

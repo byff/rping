@@ -28,23 +28,23 @@ export component MainWindow {
     property <color> window_fill: #181A26;
 
     // === WINDOW PROPERTIES ===
-    in-out property <string> status_message: "Ready";
-    in-out property <string> input_text: "";
-    in-out property <bool> is_running: false;
-    in-out property <int> selected_ip_count: 0;
+    property <string> status_message: "Ready";
+    property <string> input_text: "";
+    property <bool> is_running: false;
+    property <int> selected_ip_count: 0;
 
     // === TABLE DATA ===
     property <int> sort_column: 0;
     property <bool> sort_descending: false;
 
     // === SETTINGS PROPERTIES ===
-    in-out property <int> timeout_value: 1000;
-    in-out property <int> packet_size_value: 64;
-    in-out property <int> interval_value: 1000;
-    in-out property <int> max_concurrent_value: 100;
-    in-out property <bool> cidr_enabled: true;
-    in-out property <bool> remember_addresses: true;
-    in-out property <bool> debug_mode: false;
+    property <int> timeout_value: 1000;
+    property <int> packet_size_value: 64;
+    property <int> interval_value: 1000;
+    property <int> max_concurrent_value: 100;
+    property <bool> cidr_enabled: true;
+    property <bool> remember_addresses: true;
+    property <bool> debug_mode: false;
 
     // === EXPORT FIELD CHECKBOXES ===
     property <bool> export_hostname: true;
@@ -59,12 +59,12 @@ export component MainWindow {
     property <bool> export_avg: true;
 
     // === DIALOG STATES ===
-    in-out property <bool> settings_dialog_open: false;
-    in-out property <bool> ip_warning_dialog_open: false;
+    property <bool> settings_dialog_open: false;
+    property <bool> ip_warning_dialog_open: false;
     property <bool> about_dialog_open: false;
 
     // === SAMPLE TABLE DATA ===
-    in-out property <[TableRow]> table_rows: [
+    property <[TableRow]> table_rows: [
         { num: 1, hostname: "router.local", ip: "192.168.1.1", success: 10, fail: 0, fail_pct: "0%", total: 10, rtt: "1.5ms", rtt_max: "2.1ms", rtt_min: "1.2ms", rtt_avg: "1.5ms", status: 0 },
         { num: 2, hostname: "server1.local", ip: "192.168.1.10", success: 8, fail: 2, fail_pct: "20%", total: 10, rtt: "5.3ms", rtt_max: "8.2ms", rtt_min: "3.1ms", rtt_avg: "5.1ms", status: 1 },
         { num: 3, hostname: "server2.local", ip: "192.168.1.11", success: 3, fail: 7, fail_pct: "70%", total: 10, rtt: "12.5ms", rtt_max: "25.0ms", rtt_min: "8.0ms", rtt_avg: "14.2ms", status: 2 },
@@ -88,16 +88,15 @@ export component MainWindow {
     callback close_about();
     callback sort_table(int);
 
-    Window {
-        background: root.bg;
-        title: "PingTest";
-        width: 1000px;
-        height: 700px;
+    width: 1000px;
+    height: 700px;
+    background: root.bg;
+    title: "PingTest";
 
-        // === MAIN LAYOUT ===
-        VerticalLayout {
-        padding: 0px;
-        spacing: 0px;
+    // === MAIN LAYOUT ===
+    VerticalLayout {
+        padding: 0;
+        spacing: 0;
 
         // === TOOLBAR ===
         Rectangle {
@@ -115,6 +114,7 @@ export component MainWindow {
                     horizontal_stretch: 0;
                     width: 70px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Start";
@@ -142,6 +142,7 @@ export component MainWindow {
                     background: !root.is_running ? root.text_dim : root.fail;
                     width: 70px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Stop";
@@ -169,6 +170,7 @@ export component MainWindow {
                     background: root.warning;
                     width: 80px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Refresh";
@@ -188,7 +190,9 @@ export component MainWindow {
 
                 // Separator
                 Rectangle {
+                    width: 1px;
                     background: root.text_dim;
+                    horizontal_stretch: 0;
                     width: 10px;
                 }
 
@@ -198,6 +202,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 70px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Import";
@@ -220,6 +225,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 100px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Export Results";
@@ -242,6 +248,7 @@ export component MainWindow {
                     background: root.accent;
                     width: 110px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Insert to Source";
@@ -267,6 +274,7 @@ export component MainWindow {
                     background: root.text_dim;
                     width: 80px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "Settings";
@@ -289,6 +297,7 @@ export component MainWindow {
                     background: root.text_dim;
                     width: 70px;
                     height: 32px;
+                    cursor: MouseCursor.pointer;
 
                     Text {
                         text: "About";
@@ -329,9 +338,11 @@ export component MainWindow {
                         font_weight: 700;
                     }
 
-                    TextInput {
+                    TextEdit {
+                        placeholder_text: "Enter IP addresses, one per line or CIDR format";
                         text <=> root.input_text;
                         font_size: 13px;
+                        wrap: TextWrap.wrap;
                         horizontal_stretch: 1;
                         vertical_stretch: 1;
                     }
@@ -345,22 +356,23 @@ export component MainWindow {
                 vertical_stretch: 1;
 
                 VerticalLayout {
-                    padding: 0px;
-                    spacing: 0px;
+                    padding: 0;
+                    spacing: 0;
 
                     // Table Header
                     Rectangle {
-                        background: #252830;
+                        background-color: #252830;
                         height: 32px;
 
                         HorizontalLayout {
                             padding-left: 4px;
                             padding-right: 4px;
-                            spacing: 0px;
+                            spacing: 0;
 
                             // # Column
                             Rectangle {
                                 width: 40px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "#";
@@ -379,6 +391,7 @@ export component MainWindow {
                             // Hostname Column
                             Rectangle {
                                 width: 130px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Hostname";
@@ -397,6 +410,7 @@ export component MainWindow {
                             // IP Column
                             Rectangle {
                                 width: 120px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "IP";
@@ -415,6 +429,7 @@ export component MainWindow {
                             // Success Column
                             Rectangle {
                                 width: 60px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Success";
@@ -433,6 +448,7 @@ export component MainWindow {
                             // Fail Column
                             Rectangle {
                                 width: 50px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Fail";
@@ -451,6 +467,7 @@ export component MainWindow {
                             // Fail% Column
                             Rectangle {
                                 width: 60px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Fail%";
@@ -469,6 +486,7 @@ export component MainWindow {
                             // Total Column
                             Rectangle {
                                 width: 55px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Total";
@@ -487,6 +505,7 @@ export component MainWindow {
                             // RTT Column
                             Rectangle {
                                 width: 80px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "RTT(ms)";
@@ -505,6 +524,7 @@ export component MainWindow {
                             // Max Column
                             Rectangle {
                                 width: 75px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Max";
@@ -523,6 +543,7 @@ export component MainWindow {
                             // Min Column
                             Rectangle {
                                 width: 75px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Min";
@@ -541,6 +562,7 @@ export component MainWindow {
                             // Avg Column
                             Rectangle {
                                 width: 75px;
+                                cursor: MouseCursor.pointer;
 
                                 Text {
                                     text: "Avg";
@@ -559,9 +581,9 @@ export component MainWindow {
                     }
 
                     // Table Body (Scrollable)
-                    Flickable {
+                    ListView {
                         vertical_stretch: 1;
-                        VerticalLayout {
+
                         for row[i] in root.table_rows: Rectangle {
                             background: Math.mod(i, 2) == 0 ? root.window_fill : #1E2128;
                             height: 28px;
@@ -569,7 +591,7 @@ export component MainWindow {
                             HorizontalLayout {
                                 padding-left: 4px;
                                 padding-right: 4px;
-                                spacing: 0px;
+                                spacing: 0;
 
                                 // # 
                                 Text {
@@ -597,7 +619,7 @@ export component MainWindow {
                                     text: row.ip;
                                     color: row.status == 0 ? root.success : (row.status == 1 ? root.warning : (row.status == 2 ? root.fail : root.text_dim));
                                     font_size: 12px;
-                                    font_weight: row.status == 0 ? 700 : 400;
+                                    font_weight: row.status == 0 ? bold : normal;
                                     horizontal_alignment: center;
                                     vertical_alignment: center;
                                 }
@@ -728,6 +750,8 @@ export component MainWindow {
             border_radius: 8px;
             width: 500px;
             height: 520px;
+            horizontal_center: parent.horizontal_center;
+            vertical_center: parent.vertical_center;
 
             VerticalLayout {
                 padding: 16px;
@@ -770,10 +794,18 @@ export component MainWindow {
                                 width: 100px;
                             }
 
+                            Slider {
+                                value <=> root.timeout_value;
+                                minimum: 100;
+                                maximum: 10000;
+                                width: 200px;
+                            }
+
                             Text {
                                 text: root.timeout_value + "ms";
                                 color: root.text_dim;
                                 font_size: 12px;
+                                width: 70px;
                             }
                         }
 
@@ -788,10 +820,18 @@ export component MainWindow {
                                 width: 100px;
                             }
 
+                            Slider {
+                                value <=> root.packet_size_value;
+                                minimum: 32;
+                                maximum: 65535;
+                                width: 200px;
+                            }
+
                             Text {
                                 text: root.packet_size_value + " B";
                                 color: root.text_dim;
                                 font_size: 12px;
+                                width: 70px;
                             }
                         }
 
@@ -806,10 +846,18 @@ export component MainWindow {
                                 width: 100px;
                             }
 
+                            Slider {
+                                value <=> root.interval_value;
+                                minimum: 100;
+                                maximum: 5000;
+                                width: 200px;
+                            }
+
                             Text {
                                 text: root.interval_value + "ms";
                                 color: root.text_dim;
                                 font_size: 12px;
+                                width: 70px;
                             }
                         }
 
@@ -824,10 +872,18 @@ export component MainWindow {
                                 width: 100px;
                             }
 
+                            Slider {
+                                value <=> root.max_concurrent_value;
+                                minimum: 1;
+                                maximum: 500;
+                                width: 200px;
+                            }
+
                             Text {
                                 text: root.max_concurrent_value + " threads";
                                 color: root.text_dim;
                                 font_size: 12px;
+                                width: 70px;
                             }
                         }
                     }
@@ -854,19 +910,8 @@ export component MainWindow {
                         HorizontalLayout {
                             spacing: 8px;
 
-                            Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                border_radius: 2px;
-                                background: root.accent;
-                                Text {
-                                    text: root.cidr_enabled ? "x" : "";
-                                    color: white;
-                                    font_size: 12px;
-                                }
-                                TouchArea {
-                                    clicked => { root.cidr_enabled = !root.cidr_enabled; }
-                                }
+                            CheckBox {
+                                checked <=> root.cidr_enabled;
                             }
 
                             Text {
@@ -881,19 +926,8 @@ export component MainWindow {
                         HorizontalLayout {
                             spacing: 8px;
 
-                            Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                border_radius: 2px;
-                                background: root.accent;
-                                Text {
-                                    text: root.remember_addresses ? "x" : "";
-                                    color: white;
-                                    font_size: 12px;
-                                }
-                                TouchArea {
-                                    clicked => { root.remember_addresses = !root.remember_addresses; }
-                                }
+                            CheckBox {
+                                checked <=> root.remember_addresses;
                             }
 
                             Text {
@@ -908,19 +942,8 @@ export component MainWindow {
                         HorizontalLayout {
                             spacing: 8px;
 
-                            Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                border_radius: 2px;
-                                background: root.accent;
-                                Text {
-                                    text: root.debug_mode ? "x" : "";
-                                    color: white;
-                                    font_size: 12px;
-                                }
-                                TouchArea {
-                                    clicked => { root.debug_mode = !root.debug_mode; }
-                                }
+                            CheckBox {
+                                checked <=> root.debug_mode;
                             }
 
                             Text {
@@ -956,66 +979,31 @@ export component MainWindow {
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_hostname ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_hostname; }
                                 Text { text: "Hostname"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_ip ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_ip; }
                                 Text { text: "IP"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_success ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_success; }
                                 Text { text: "Success"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_fail ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_fail; }
                                 Text { text: "Fail"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_fail_percent ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_fail_percent; }
                                 Text { text: "Fail%"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
                         }
@@ -1026,66 +1014,31 @@ export component MainWindow {
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_total ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_total; }
                                 Text { text: "Total"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_rtt ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_rtt; }
                                 Text { text: "RTT"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_max ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_max; }
                                 Text { text: "Max"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_min ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_min; }
                                 Text { text: "Min"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
 
                             HorizontalLayout {
                                 spacing: 4px;
-                                Rectangle {
-                                width: 20px;
-                                height: 20px;
-                                Text {
-                                    text: root.export_avg ? "[x]" : "[ ]";
-                                    font_size: 12px;
-                                }
-                            }
+                                CheckBox { checked <=> root.export_avg; }
                                 Text { text: "Avg"; color: white; font_size: 11px; vertical_alignment: center; }
                             }
                         }
@@ -1102,6 +1055,7 @@ export component MainWindow {
                         background: root.success;
                         width: 80px;
                         height: 32px;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Save";
@@ -1125,6 +1079,7 @@ export component MainWindow {
                         background: root.text_dim;
                         width: 80px;
                         height: 32px;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Reset";
@@ -1148,6 +1103,7 @@ export component MainWindow {
                         background: root.fail;
                         width: 80px;
                         height: 32px;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Close";
@@ -1182,6 +1138,8 @@ export component MainWindow {
             border_radius: 8px;
             width: 400px;
             height: 180px;
+            horizontal_center: parent.horizontal_center;
+            vertical_center: parent.vertical_center;
 
             VerticalLayout {
                 padding: 20px;
@@ -1202,6 +1160,7 @@ export component MainWindow {
                     color: white;
                     font_size: 13px;
                     horizontal_alignment: center;
+                    wrap: TextWrap.wrap;
                 }
 
                 // Buttons
@@ -1214,6 +1173,7 @@ export component MainWindow {
                         background: root.success;
                         width: 100px;
                         height: 32px;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Continue";
@@ -1239,6 +1199,7 @@ export component MainWindow {
                         background: root.fail;
                         width: 80px;
                         height: 32px;
+                        cursor: MouseCursor.pointer;
 
                         Text {
                             text: "Cancel";
@@ -1274,6 +1235,8 @@ export component MainWindow {
             border_radius: 8px;
             width: 360px;
             height: 280px;
+            horizontal_center: parent.horizontal_center;
+            vertical_center: parent.vertical_center;
 
             VerticalLayout {
                 padding: 24px;
@@ -1308,6 +1271,7 @@ export component MainWindow {
                     color: white;
                     font_size: 13px;
                     horizontal_alignment: center;
+                    wrap: TextWrap.wrap;
                 }
 
                 Rectangle { vertical_stretch: 1; }
@@ -1326,7 +1290,8 @@ export component MainWindow {
                     background: root.accent;
                     width: 100px;
                     height: 36px;
-                    horizontal_stretch: 0;
+                    cursor: MouseCursor.pointer;
+                    horizontal_alignment: center;
 
                     Text {
                         text: "Close";
@@ -1346,7 +1311,6 @@ export component MainWindow {
                 }
             }
         }
-    }
     }
 }
 

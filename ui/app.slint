@@ -17,7 +17,7 @@ struct TableRow {
     status: int  // -1=unknown, 0=alive, 1=partial, 2=failed
 }
 
-export component MainWindow {
+export component MainWindow inherits Window {
     // === COLOR PALETTE ===
     property <color> accent: #409CFF;
     property <color> success: #50C878;
@@ -688,7 +688,6 @@ export component MainWindow {
             }
         }
 
-                    }
         // === STATUS BAR ===
         Rectangle {
             background: root.window_fill;
@@ -771,20 +770,10 @@ export component MainWindow {
                                 width: 100px;
                             }
 
-                            Rectangle {
-                                width: 200px;
-                                Text {
-                                    text: root.timeout_value + "ms";
-                                    color: root.text_dim;
-                                    font_size: 12px;
-                                }
-                            }
-
                             Text {
                                 text: root.timeout_value + "ms";
                                 color: root.text_dim;
                                 font_size: 12px;
-                                width: 70px;
                             }
                         }
 
@@ -799,20 +788,10 @@ export component MainWindow {
                                 width: 100px;
                             }
 
-                            Rectangle {
-                                width: 200px;
-                                Text {
-                                    text: root.packet_size_value;
-                                    color: root.text_dim;
-                                    font_size: 12px;
-                                }
-                            }
-
                             Text {
                                 text: root.packet_size_value + " B";
                                 color: root.text_dim;
                                 font_size: 12px;
-                                width: 70px;
                             }
                         }
 
@@ -827,20 +806,10 @@ export component MainWindow {
                                 width: 100px;
                             }
 
-                            Rectangle {
-                                width: 200px;
-                                Text {
-                                    text: root.interval_value + "ms";
-                                    color: root.text_dim;
-                                    font_size: 12px;
-                                }
-                            }
-
                             Text {
                                 text: root.interval_value + "ms";
                                 color: root.text_dim;
                                 font_size: 12px;
-                                width: 70px;
                             }
                         }
 
@@ -855,20 +824,10 @@ export component MainWindow {
                                 width: 100px;
                             }
 
-                            Rectangle {
-                                width: 200px;
-                                Text {
-                                    text: root.max_concurrent_value;
-                                    color: root.text_dim;
-                                    font_size: 12px;
-                                }
-                            }
-
                             Text {
                                 text: root.max_concurrent_value + " threads";
                                 color: root.text_dim;
                                 font_size: 12px;
-                                width: 70px;
                             }
                         }
                     }
@@ -905,6 +864,9 @@ export component MainWindow {
                                     color: white;
                                     font_size: 12px;
                                 }
+                                TouchArea {
+                                    clicked => { root.cidr_enabled = !root.cidr_enabled; }
+                                }
                             }
 
                             Text {
@@ -929,6 +891,9 @@ export component MainWindow {
                                     color: white;
                                     font_size: 12px;
                                 }
+                                TouchArea {
+                                    clicked => { root.remember_addresses = !root.remember_addresses; }
+                                }
                             }
 
                             Text {
@@ -952,6 +917,9 @@ export component MainWindow {
                                     text: root.debug_mode ? "x" : "";
                                     color: white;
                                     font_size: 12px;
+                                }
+                                TouchArea {
+                                    clicked => { root.debug_mode = !root.debug_mode; }
                                 }
                             }
 
